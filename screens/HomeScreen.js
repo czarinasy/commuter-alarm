@@ -23,6 +23,10 @@ class HomeScreen extends React.Component {
           title="Sidebar"
           onPress={() => this.props.navigation.navigate("Sidebar")}
         />
+        <Button
+          title="Tracker"
+          onPress={() => this.props.navigation.navigate("Tracker")}
+        />
       </View>
     );
   }
