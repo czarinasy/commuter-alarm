@@ -8,14 +8,26 @@ class Sidebar extends React.Component {
     return (
       <View style={styles.container}>
         <Text style={styles.text}>Sidebar</Text>
-        <Button title="Home" onPress={() => this.props.navigation.popToTop()} />
+        <Button
+          title="Home"
+          onPress={() => {
+            this.props.navigation.popToTop();
+            console.log("pressed Home button");
+          }}
+        />
         <Button
           title="MyFavorites"
-          onPress={() => this.props.navigation.navigate("MyFavorites")}
+          onPress={() => {
+            this.props.navigation.navigate("MyFavorites");
+            console.log("pressed MyFavorite button");
+          }}
         />
         <Button
           title="Settings"
-          onPress={() => this.props.navigation.navigate("Settings")}
+          onPress={() => {
+            this.props.navigation.navigate("Settings");
+            console.log("pressed Settings button");
+          }}
         />
       </View>
     );

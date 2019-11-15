@@ -8,7 +8,6 @@ class Tracker extends React.Component {
     longitude: 0
   };
   getLocationHandler = () => {
-    console.log("pressed button");
     navigator.geolocation.getCurrentPosition(
       position => {
         this.setState({
@@ -18,6 +17,7 @@ class Tracker extends React.Component {
       },
       err => console.log(err)
     );
+    console.log("pressed GetLocation button");
   };
   render() {
     return (
