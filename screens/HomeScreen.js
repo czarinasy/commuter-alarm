@@ -26,8 +26,8 @@ class HomeScreen extends React.Component {
       longitude: 0
     }),
       (this.destination = {
-        latitude: 0,
-        longitude: 0
+        latitude: 14,
+        longitude: 12
       });
   }
 

@@ -58,6 +58,15 @@ class SelectDestination extends React.Component {
                   onChangeText={handleTextChange}
                   value={inputValue}
                 />
+
+                <Button
+                  title="Select"
+                  onPress={() => {
+                    this.props.navigation.navigate("Tracker", {
+                      destinationName: "destination"
+                    });
+                  }}
+                />
               </View>
 
               {isSearching && <ActivityIndicator size="large" color="blue" />}

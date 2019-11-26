@@ -22,10 +22,11 @@ class Tracker extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>Tracker</Text>
+        {/*<Text style={styles.text}>Tracker</Text>
         <Text>Latitude: {this.state.latitude}</Text>
         <Text>Longitude: {this.state.longitude}</Text>
-        <GetLocation onGetLocation={this.getLocationHandler} />
+    <GetLocation onGetLocation={this.getLocationHandler} />*/}
+  <Text>{this.props.navigation.getParam('destinationName')}</Text>
       </View>
     );
   }
