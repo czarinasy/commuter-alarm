@@ -21,10 +21,14 @@ import MapView, { Marker } from "react-native-maps";
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
+    (this.state = {
       latitude: 0,
       longitude: 0
-    };
+    }),
+      (this.destination = {
+        latitude: 0,
+        longitude: 0
+      });
   }
 
   componentDidMount() {
@@ -64,6 +68,7 @@ class HomeScreen extends React.Component {
           <MapView
             style={styles.mapStyle}
             showsUserLocation={true}
+            rotateEnabled={false}
             region={{
               latitude: this.state.latitude,
               longitude: this.state.longitude,
@@ -71,7 +76,7 @@ class HomeScreen extends React.Component {
               longitudeDelta: 0.0421
             }}
           >
-            <Marker coordinate={this.state}></Marker>
+            <Marker coordinate={this.destination}></Marker>
           </MapView>
 
           <Button
