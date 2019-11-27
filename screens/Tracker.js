@@ -26,7 +26,7 @@ class Tracker extends React.Component {
         <Text>Latitude: {this.state.latitude}</Text>
         <Text>Longitude: {this.state.longitude}</Text>
     <GetLocation onGetLocation={this.getLocationHandler} />*/}
-  <Text>{this.props.navigation.getParam('destinationName')}</Text>
+        <Text>{this.props.navigation.getParam("destinationName")}</Text>
       </View>
     );
   }
