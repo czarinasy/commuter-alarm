@@ -16,7 +16,8 @@ class SelectDestination extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedDestination: null //location object from the selected child prop gets passed here
+      selectedDestination: null, //location object from the selected child prop gets passed here
+      test2: "henlo"
     };
   }
 
@@ -25,8 +26,13 @@ class SelectDestination extends React.Component {
     this.setState({ selectedDestination: dataFromChild });
 
     //for testing
-    console.log("\n\n-------------------CHOSEN LOCATION:-------------------");
-    console.log(this.state.selectedDestination);
+    console.log(
+      "\n\n-------------------THE CHOSEN LOCATION:-------------------"
+    );
+    console.log(
+      this.state.selectedDestination.locationObject.address_components[0]
+        .long_name
+    );
   };
 
   render() {
@@ -63,7 +69,8 @@ class SelectDestination extends React.Component {
                   title="Select"
                   onPress={() => {
                     this.props.navigation.navigate("Tracker", {
-                      destinationName: "destination"
+                      destinationName: this.state.selectedDestination
+                        .locationObject.address_components[0].long_name
                     });
                   }}
                 />

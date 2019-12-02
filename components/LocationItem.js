@@ -22,6 +22,7 @@ class LocationItem extends PureComponent {
       locationObject: res
     });
     //passes the chosen location object to parent (SelectDestination)
+
     this.props.setDestinationFromChild(this.state);
   };
 

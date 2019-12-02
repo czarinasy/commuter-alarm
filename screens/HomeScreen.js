@@ -16,6 +16,9 @@ import {
 } from "native-base";
 
 import MapView, { Marker } from "react-native-maps";
+const API_KEY = "AIzaSyCMaoEDwHYWZ-eXOnTfg6SaSR8xSqrg_gM";
+
+const destination = { latitude: 37.771707, longitude: -122.4053769 };
 
 // The home screen can access multiple other screens through different navigation buttons
 class HomeScreen extends React.Component {
@@ -26,8 +29,8 @@ class HomeScreen extends React.Component {
       longitude: 0
     }),
       (this.destination = {
-        latitude: 14,
-        longitude: 12
+        latitude: 14.61828,
+        longitude: 121.04976
       });
   }
 
