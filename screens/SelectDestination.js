@@ -3,18 +3,44 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   TextInput,
   ScrollView,
-  ActivityIndicator
+  ActivityIndicator,
+  Dimensions
 } from "react-native";
+import {
+  Header,
+  Left,
+  Button,
+  Icon,
+  Body,
+  Right,
+  Item,
+  Container
+} from "native-base";
 import { GoogleAutoComplete } from "react-native-google-autocomplete";
 import LocationItem from "../components/LocationItem";
 const API_KEY = "AIzaSyCMaoEDwHYWZ-eXOnTfg6SaSR8xSqrg_gM";
 
 class SelectDestination extends React.Component {
+  static navigationOptions = {
+    title: "Search Destination",
+    headerStyle:{
+      backgroundColor: "lightskyblue"
+    },
+    headerTitleStyle:{
+      fontSize: 15,
+      color: "white",
+      fontWeight: "normal",
+      alignSelf: "center"
+    }
+    
+  };
   render() {
     return (
+    //   <Container>
+    
+    // </Container>
       <View style={styles.container}>
         <GoogleAutoComplete
           apiKey={API_KEY}
@@ -32,22 +58,25 @@ class SelectDestination extends React.Component {
             <React.Fragment>
               {console.log("locationResults", locationResults)}
               <View style={styles.inputWrapper}>
+                <View style = {styles.search}>
+                  <Icon name="ios-map" style={styles.map}/>
                 <TextInput
                   style={styles.textInput}
-                  placeholder="Select Destination"
+                  placeholder="Search..."
                   onChangeText={handleTextChange}
                   value={inputValue}
                 />
+                </View>
               </View>
-              {isSearching && <ActivityIndicator size="large" color="blue" />}
+              {isSearching && <ActivityIndicator size="large" color="lightsteelblue" />}
               <ScrollView>
                 {locationResults.map(el => (
                   <LocationItem
                     {...el}
                     key={el.id}
                     fetchDetails={fetchDetails}
-                  />
-                ))}
+                   color="lightsteelblue"/>
+                )) }
               </ScrollView>
             </React.Fragment>
           )}
@@ -60,23 +89,34 @@ class SelectDestination extends React.Component {
 export default SelectDestination;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
+  map:{
+    color: "lightskyblue"
+  },
+  search:{
     alignItems: "center",
-    justifyContent: "center"
+    flexDirection: "row"
+  },
+  container: {
+    margin:15,
+    backgroundColor: "#fff",
+    // alignItems: "center",
+    // justifyContent: "center",
+    width: Dimensions.get("window").width * 0.9
   },
   text: {
     fontSize: 30
   },
   textInput: {
     height: 40,
-    width: 300,
+    width: 296,
     borderWidth: 1,
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
+    marginLeft: 10,
+    borderColor: "lightgrey",
+    color: "lightsteelblue"
   },
   inputWrapper: {
-    marginTop: 80,
+    marginBottom: 15,
     flexDirection: "row"
-  }
+  },
 });
