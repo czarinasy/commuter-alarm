@@ -16,8 +16,7 @@ class SelectDestination extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedDestination: null, //location object from the selected child prop gets passed here
-      test2: "henlo"
+      selectedDestination: null //location object from the selected child prop gets passed here
     };
   }
 
@@ -35,9 +34,21 @@ class SelectDestination extends React.Component {
     );
   };
 
+  printSelectedDestination() {
+    if (this.state.selectedDestination == null) {
+      return "None Selected";
+    } else {
+      return this.state.selectedDestination.locationObject.address_components[0]
+        .long_name;
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
+        <Text>Selected Destination: </Text>
+        <Text>{this.printSelectedDestination()}</Text>
+
         {/*GOOGLE PLACES API*/}
         <GoogleAutoComplete
           apiKey={API_KEY}
