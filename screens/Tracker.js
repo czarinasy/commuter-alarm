@@ -19,7 +19,6 @@ class HomeScreen extends React.Component {
         longitude: 121.04976
       });
   }
-
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       position => {
@@ -71,7 +70,7 @@ class HomeScreen extends React.Component {
         >
           <MapView.Circle
             center={this.destination}
-            radius={100}
+            radius={500} //in meters
             strokeWidth={2}
             strokeColor="#3399ff"
             fillColor="#80bfff"
