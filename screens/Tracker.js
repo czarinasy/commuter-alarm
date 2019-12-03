@@ -31,6 +31,10 @@ class HomeScreen extends React.Component {
       },
       err => console.log(err)
     );
+    this.destination = {
+      latitude: this.props.navigation.getParam("destLat"),
+      longitude: this.props.navigation.getParam("destLong")
+    };
   }
   render() {
     openDrawer = () => {
@@ -55,7 +59,9 @@ class HomeScreen extends React.Component {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
           }}
-        ></MapView>
+        >
+          <Marker coordinate={this.destination} />
+        </MapView>
       </View>
     );
   }
