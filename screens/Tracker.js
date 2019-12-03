@@ -35,6 +35,15 @@ class HomeScreen extends React.Component {
       latitude: this.props.navigation.getParam("destLat"),
       longitude: this.props.navigation.getParam("destLong")
     };
+    console.log(
+      "CURRENT LOCATION: " + this.state.latitude + " " + this.state.longitude
+    );
+    console.log(
+      "DESTINATION: " +
+        this.destination.latitude +
+        " " +
+        this.destination.longitude
+    );
   }
   render() {
     openDrawer = () => {
