@@ -1,31 +1,13 @@
 import React from "react";
 import { StyleSheet, Text, Dimensions, View } from "react-native";
 import {
-    Header,
-    Left,
-    Button,
-    Icon,
-    Body,
-    Right,
-    Container,
-    Footer,
-    FooterTab,
-    Content,
-    Item,
-    Input
+    Button
   } from "native-base";
 
 class Navbar extends React.Component {
     static navigationOptions = {
-      title: "Navbar",
       headerStyle:{
         backgroundColor: "lightskyblue"
-      },
-      headerTitleStyle:{
-        fontSize: 15,
-        color: "white",
-        fontWeight: "normal",
-        alignSelf: "center"
       }
       
     };
@@ -35,20 +17,29 @@ class Navbar extends React.Component {
         <Button transparent
             style={styles.button}
             onPress={() => {
+              this.props.navigation.navigate("HomeScreen");
+              console.log("pressed Home button");
+            }}
+          >
+            <Text style={styles.buttontxt}>Home</Text>
+          </Button>
+          <Button transparent
+            style={styles.button}
+            onPress={() => {
+              this.props.navigation.navigate("MyFavorites");
+              console.log("pressed Favorites button");
+            }}
+          >
+            <Text style={styles.buttontxt}>My Favorites</Text>
+          </Button>
+          <Button transparent
+            style={styles.button}
+            onPress={() => {
               this.props.navigation.navigate("Settings");
               console.log("pressed Settings button");
             }}
           >
             <Text style={styles.buttontxt}>Settings</Text>
-          </Button>
-          <Button transparent
-            style={styles.button}
-            onPress={() => {
-              this.props.navigation.navigate("Notifications");
-              console.log("pressed Notifications button");
-            }}
-          >
-            <Text style={styles.buttontxt}>Notifications</Text>
           </Button>
       </View>
     );
@@ -75,8 +66,10 @@ const styles = StyleSheet.create({
     // position: "absolute",
     // zIndex: 10,
     width: Dimensions.get("window").width * 0.9,
-    margin: 15,
+    height: 70,
     justifyContent: "center",
-    alignSelf: "center"
+    alignSelf: "center",
+    borderBottomWidth: 1,
+    borderColor: "white"
   }
 });

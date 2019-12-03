@@ -47,6 +47,7 @@ class SelectDestination extends React.Component {
           debounce={500}
           minLength={3}
           components="country:ph"
+          styles={{color:"lightsteelblue"}}
         >
           {({
             handleTextChange,
@@ -75,7 +76,7 @@ class SelectDestination extends React.Component {
                     {...el}
                     key={el.id}
                     fetchDetails={fetchDetails}
-                   color="lightsteelblue"/>
+                   />
                 )) }
               </ScrollView>
             </React.Fragment>
