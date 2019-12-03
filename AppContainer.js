@@ -4,6 +4,7 @@ import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 
 import HomeScreen from "./screens/HomeScreen";
+import Ringtone from "./screens/Ringtone";
 import SelectDestination from "./screens/SelectDestination";
 import Navbar from "./screens/Navbar";
 import Notifications from "./screens/Notifications";
@@ -23,6 +24,7 @@ const NavigationStack = createStackNavigator({
   SelectDestination: { screen: SelectDestination },
   SetWarnDistance: { screen: SetWarnDistance },
   Navbar: { screen: Navbar },
+  Ringtone: { screen: Ringtone },
   Notifications: { screen: Notifications },
   MyFavorites: { screen: MyFavorites },
   Settings: { screen: Settings },
