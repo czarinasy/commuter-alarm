@@ -35,7 +35,6 @@ class SelectDestination extends React.Component {
         .long_name
     );
     console.log(this.state.selectedDestination.locationObject.place_id);
-    console.log(this.state.selectedDestination.geometry.location);
   };
 
   printSelectedDestination() {
@@ -118,7 +117,11 @@ class SelectDestination extends React.Component {
               this.props.navigation.navigate("Tracker", {
                 destinationName: this.state.selectedDestination.locationObject
                   .address_components[0].long_name,
-                placeID: this.state.selectedDestination.locationObject.place_id
+                placeID: this.state.selectedDestination.locationObject.place_id,
+                destLat: this.state.selectedDestination.locationObject.geometry
+                  .location.lat,
+                destLong: this.state.selectedDestination.locationObject.geometry
+                  .location.lng
               });
             }
           }}

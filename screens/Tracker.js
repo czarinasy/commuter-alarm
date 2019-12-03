@@ -40,6 +40,11 @@ class HomeScreen extends React.Component {
       <View style={styles.container}>
         <Text>{this.props.navigation.getParam("destinationName")}</Text>
         <Text>{this.props.navigation.getParam("placeID")}</Text>
+        <Text>{this.props.navigation.getParam("destLat")}</Text>
+        <Text>{this.props.navigation.getParam("destLong")}</Text>
+        {/*<Text>{this.props.navigation.getParam("destLat")}</Text>
+        <Text>{this.props.navigation.getParam("destLong")}</Text>*/}
+
         <MapView
           style={styles.mapStyle}
           showsUserLocation={true}
@@ -50,9 +55,7 @@ class HomeScreen extends React.Component {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
           }}
-        >
-          <Marker placeID></Marker>
-        </MapView>
+        ></MapView>
       </View>
     );
   }
