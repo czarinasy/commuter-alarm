@@ -69,6 +69,13 @@ class HomeScreen extends React.Component {
             longitudeDelta: 0.0421
           }}
         >
+          <MapView.Circle
+            center={this.destination}
+            radius={100}
+            strokeWidth={2}
+            strokeColor="#3399ff"
+            fillColor="#80bfff"
+          />
           <Marker coordinate={this.destination} />
         </MapView>
       </View>
