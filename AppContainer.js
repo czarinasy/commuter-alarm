@@ -13,13 +13,13 @@ import Tracker from "./screens/Tracker";
 
 // This is a directory of all the screens
 const NavigationStack = createStackNavigator({
-  HomeScreen: {
-    screen: HomeScreen,
+  SelectDestination: {
+    screen: SelectDestination,
     navigationOptions: {
       header: null
     }
   },
-  SelectDestination: { screen: SelectDestination },
+  HomeScreen: { screen: HomeScreen },
   SetWarnDistance: { screen: SetWarnDistance },
   Sidebar: { screen: Sidebar },
   MyFavorites: { screen: MyFavorites },

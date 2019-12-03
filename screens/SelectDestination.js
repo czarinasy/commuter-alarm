@@ -6,7 +6,8 @@ import {
   Button,
   TextInput,
   ScrollView,
-  ActivityIndicator
+  ActivityIndicator,
+  Picker
 } from "react-native";
 import { GoogleAutoComplete } from "react-native-google-autocomplete";
 import LocationItem from "../components/LocationItem";
@@ -16,7 +17,8 @@ class SelectDestination extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedDestination: null //location object from the selected child prop gets passed here
+      selectedDestination: null, //location object from the selected child prop gets passed here
+      warningDistance: null
     };
   }
 
@@ -32,6 +34,8 @@ class SelectDestination extends React.Component {
       this.state.selectedDestination.locationObject.address_components[0]
         .long_name
     );
+    console.log(this.state.selectedDestination.locationObject.place_id);
+    console.log(this.state.selectedDestination.geometry.location);
   };
 
   printSelectedDestination() {
@@ -46,6 +50,7 @@ class SelectDestination extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <Text>Where are you going?</Text>
         <Text>Selected Destination: </Text>
         <Text>{this.printSelectedDestination()}</Text>
 
@@ -71,19 +76,9 @@ class SelectDestination extends React.Component {
                 {/*search box*/}
                 <TextInput
                   style={styles.textInput}
-                  placeholder="Select Destination"
+                  placeholder={this.printSelectedDestination()}
                   onChangeText={handleTextChange}
                   value={inputValue}
-                />
-
-                <Button
-                  title="Select"
-                  onPress={() => {
-                    this.props.navigation.navigate("Tracker", {
-                      destinationName: this.state.selectedDestination
-                        .locationObject.address_components[0].long_name
-                    });
-                  }}
                 />
               </View>
 
@@ -105,6 +100,29 @@ class SelectDestination extends React.Component {
             </React.Fragment>
           )}
         </GoogleAutoComplete>
+        <Picker
+          selectedValue={this.state.language}
+          style={{ height: 50, width: 100 }}
+          onValueChange={(itemValue, itemIndex) =>
+            this.setState({ language: itemValue })
+          }
+        >
+          <Picker.Item label="1 km" value="km1" />
+          <Picker.Item label="3 km" value="km3" />
+          <Picker.Item label="5 km" value="km5" />
+        </Picker>
+        <Button
+          title="Next"
+          onPress={() => {
+            if (this.state.selectedDestination != null) {
+              this.props.navigation.navigate("Tracker", {
+                destinationName: this.state.selectedDestination.locationObject
+                  .address_components[0].long_name,
+                placeID: this.state.selectedDestination.locationObject.place_id
+              });
+            }
+          }}
+        />
       </View>
     );
   }
