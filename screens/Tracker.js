@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet, Text, View, Dimensions, StatusBar } from "react-native";
 
 import MapView, { Marker } from "react-native-maps";
-const GOOGLE_API_KEY = "AIzaSyB8NsyHAo3C-dtiZOnAeKBPl0qU7ckgTAQ";
 
 // The home screen can access multiple other screens through different navigation buttons
 class HomeScreen extends React.Component {

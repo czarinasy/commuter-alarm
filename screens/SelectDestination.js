@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { GoogleAutoComplete } from "react-native-google-autocomplete";
 import LocationItem from "../components/LocationItem";
-const API_KEY = "AIzaSyB8NsyHAo3C-dtiZOnAeKBPl0qU7ckgTAQ";
+import { GOOGLE_API_KEY } from "../API_KEYS";
 
 class SelectDestination extends React.Component {
   constructor(props) {
@@ -55,7 +55,7 @@ class SelectDestination extends React.Component {
 
         {/*GOOGLE PLACES API*/}
         <GoogleAutoComplete
-          apiKey={API_KEY}
+          apiKey={GOOGLE_API_KEY()}
           debounce={500}
           minLength={3}
           components="country:ph"
