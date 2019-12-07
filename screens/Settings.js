@@ -11,6 +11,7 @@ class Settings extends React.Component {
       backgroundColor: "lightskyblue"
     },
     headerTitleStyle:{
+      marginLeft: 97,
       fontSize: 15,
       color: "white",
       fontWeight: "normal",

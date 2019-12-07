@@ -23,10 +23,11 @@ class SelectDestination extends React.Component {
       backgroundColor: "lightskyblue"
     },
     headerTitleStyle:{
+      flex: 1,
+      marginLeft: 62,
       fontSize: 15,
       color: "white",
-      fontWeight: "normal",
-      alignSelf: "center"
+      fontWeight: "normal"
     }
   };
   constructor(props) {
