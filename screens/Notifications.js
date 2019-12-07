@@ -2,6 +2,9 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 class Notifications extends React.Component {
+  static navigationOptions = {
+    drawerLabel: ()=>null
+  };
   render() {
     return (
       <View style={styles.container}>

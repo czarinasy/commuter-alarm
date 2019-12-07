@@ -54,7 +54,7 @@ class HomeScreen extends React.Component {
       <Container>
         <Header style={styles.header}>
           <Left style={{ flex: 1 }}>
-            <Button transparent onPress={ () => this.props.navigation.navigate("Navbar") }>
+            <Button transparent onPress={ () => this.props.navigation.openDrawer() }>
             <Icon name="menu"/>
             </Button>
           </Left>
@@ -198,7 +198,8 @@ const styles = StyleSheet.create({
     alignSelf:"center",
     color: "white",
     fontFamily: 'Roboto',
-    fontSize: 15
+    fontSize: 15,
+    fontWeight: "bold"
   },
   button: {
     // position: "absolute",

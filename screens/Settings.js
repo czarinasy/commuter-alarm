@@ -14,7 +14,7 @@ class Settings extends React.Component {
       marginLeft: 97,
       fontSize: 15,
       color: "white",
-      fontWeight: "normal",
+      fontWeight: "bold",
       alignSelf: "center"
     }
     

@@ -3,6 +3,9 @@ import { StyleSheet, Text, View } from "react-native";
 import GetLocation from "../components/GetLocation";
 
 class Tracker extends React.Component {
+  static navigationOptions = {
+    drawerLabel: ()=>null
+  };
   state = {
     latitude: 0,
     longitude: 0

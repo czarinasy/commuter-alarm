@@ -18,17 +18,7 @@ const API_KEY = "AIzaSyCMaoEDwHYWZ-eXOnTfg6SaSR8xSqrg_gM";
 
 class SelectDestination extends React.Component {
   static navigationOptions = {
-    title: "Search Destination",
-    headerStyle:{
-      backgroundColor: "lightskyblue"
-    },
-    headerTitleStyle:{
-      flex: 1,
-      marginLeft: 62,
-      fontSize: 15,
-      color: "white",
-      fontWeight: "normal"
-    }
+    drawerLabel: ()=>null
   };
   constructor(props) {
     super(props);

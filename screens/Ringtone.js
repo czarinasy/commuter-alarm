@@ -6,17 +6,7 @@ import {
 
 class Ringtone extends React.Component {
   static navigationOptions = {
-    title: "Ringtone",
-    headerStyle:{
-      backgroundColor: "lightskyblue"
-    },
-    headerTitleStyle:{
-      fontSize: 15,
-      color: "white",
-      fontWeight: "normal",
-      alignSelf: "center"
-    }
-    
+    drawerLabel: ()=>null
   };
   render() {
     return (

@@ -6,16 +6,7 @@ import {
 
 class SetWarnDistance extends React.Component {
   static navigationOptions = {
-    title: "Default Distance",
-    headerStyle:{
-      backgroundColor: "lightskyblue"
-    },
-    headerTitleStyle:{
-      fontSize: 15,
-      color: "white",
-      fontWeight: "normal",
-      alignSelf: "center"
-    }
+    drawerLabel: ()=>null
   };
 
   render() {
