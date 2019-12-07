@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import {Button} from "native-base";
 
 // For now it's a full screen
 // But it will eventually have to be a half screen page

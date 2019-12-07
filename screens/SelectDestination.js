@@ -3,22 +3,38 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   TextInput,
   ScrollView,
-  ActivityIndicator
+  ActivityIndicator,
+  Dimensions
 } from "react-native";
+import {
+  Icon,
+  Button
+} from "native-base";
 import { GoogleAutoComplete } from "react-native-google-autocomplete";
 import LocationItem from "../components/LocationItem";
 const API_KEY = "AIzaSyCMaoEDwHYWZ-eXOnTfg6SaSR8xSqrg_gM";
 
 class SelectDestination extends React.Component {
+  static navigationOptions = {
+    title: "Search Destination",
+    headerStyle:{
+      backgroundColor: "lightskyblue"
+    },
+    headerTitleStyle:{
+      fontSize: 15,
+      color: "white",
+      fontWeight: "normal",
+      alignSelf: "center"
+    }
+  };
   constructor(props) {
     super(props);
     this.state = {
       selectedDestination: null //location object from the selected child prop gets passed here
     };
-  }
+  };
 
   //handles the setting of state from child(ListItem) to parent(this file)
   setDestinationFromChild = dataFromChild => {
@@ -36,7 +52,7 @@ class SelectDestination extends React.Component {
 
   printSelectedDestination() {
     if (this.state.selectedDestination == null) {
-      return "None Selected";
+      return "None selected";
     } else {
       return this.state.selectedDestination.locationObject.address_components[0]
         .long_name;
@@ -46,8 +62,7 @@ class SelectDestination extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Selected Destination: </Text>
-        <Text>{this.printSelectedDestination()}</Text>
+        <Text style={styles.status}>Selected Destination: {this.printSelectedDestination()}</Text>
 
         {/*GOOGLE PLACES API*/}
         <GoogleAutoComplete
@@ -69,25 +84,31 @@ class SelectDestination extends React.Component {
               {/*prints out all location options*/}
               <View style={styles.inputWrapper}>
                 {/*search box*/}
+                <View style = {styles.search}>
+                <Icon name="ios-map" style={styles.map}/>
                 <TextInput
                   style={styles.textInput}
-                  placeholder="Select Destination"
+                  placeholder="Search..."
                   onChangeText={handleTextChange}
                   value={inputValue}
                 />
+                </View>
 
-                <Button
+                
+              </View>
+              <Button
                   title="Select"
+                  style={styles.button}
                   onPress={() => {
                     this.props.navigation.navigate("Tracker", {
                       destinationName: this.state.selectedDestination
                         .locationObject.address_components[0].long_name
                     });
-                  }}
-                />
-              </View>
-
-              {isSearching && <ActivityIndicator size="large" color="blue" />}
+                  }} 
+                >
+                  <Text style={styles.txt}>Confirm</Text>
+                  </Button>
+              {isSearching && <ActivityIndicator size="large" color="lightsteelblue" style={{marginTop:10}}  />}
 
               <ScrollView>
                 {locationResults.map(el => (
@@ -113,23 +134,51 @@ class SelectDestination extends React.Component {
 export default SelectDestination;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
+  button:{
+    marginLeft: 5,
+    alignSelf: "center",
+    backgroundColor: "lightskyblue",
+    width: Dimensions.get("window").width * 0.9,
+    justifyContent: "center",
+    height: 35
+  },
+  txt:{
+    color: "white",
+    fontSize: 15
+  },
+  status:{
+    marginBottom:10,
+    color: "lightsteelblue"
+  },
+  map:{
+    color: "lightskyblue"
+  },
+  search:{
     alignItems: "center",
-    justifyContent: "center"
+    flexDirection: "row"
+  },
+  container: {
+    margin:15,
+    backgroundColor: "#fff",
+    // alignItems: "center",
+    // justifyContent: "center",
+    width: Dimensions.get("window").width * 0.9
   },
   text: {
     fontSize: 30
   },
   textInput: {
     height: 40,
-    width: 300,
+    width: 296,
     borderWidth: 1,
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
+    marginLeft: 10,
+    borderColor: "lightgrey",
+    color: "lightsteelblue"
   },
   inputWrapper: {
-    marginTop: 80,
-    flexDirection: "row"
-  }
+    marginBottom: 15,
+    flexDirection: "row",
+    alignItems: "center"
+  },
 });
