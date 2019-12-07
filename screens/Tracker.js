@@ -4,79 +4,80 @@ import { StyleSheet, Text, View, Dimensions, StatusBar } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 const GOOGLE_API_KEY = "AIzaSyB8NsyHAo3C-dtiZOnAeKBPl0qU7ckgTAQ";
 
-const destination = { latitude: 37.771707, longitude: -122.4053769 };
-
 // The home screen can access multiple other screens through different navigation buttons
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
-    (this.state = {
-      latitude: 0,
-      longitude: 0
-    }),
-      (this.destination = {
-        latitude: 14.61828,
-        longitude: 121.04976
-      });
+    this.state = {
+      current: {
+        latitude: 0,
+        longitude: 0
+      },
+      destination: {
+        latitude: 0,
+        longitude: 0,
+        destID: " "
+      },
+      warnDist: 0
+    };
   }
-  componentDidMount() {
+  componentWillMount() {
     navigator.geolocation.getCurrentPosition(
       position => {
         this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
+          current: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          }
         });
         console.log(this.state);
       },
       err => console.log(err)
     );
-    this.destination = {
-      latitude: this.props.navigation.getParam("destLat"),
-      longitude: this.props.navigation.getParam("destLong")
-    };
-    console.log(
-      "CURRENT LOCATION: " + this.state.latitude + " " + this.state.longitude
-    );
-    console.log(
-      "DESTINATION: " +
-        this.destination.latitude +
-        " " +
-        this.destination.longitude
-    );
+    this.setState({
+      destination: {
+        latitude: this.props.navigation.getParam("destLat"),
+        longitude: this.props.navigation.getParam("destLong"),
+        destID: this.props.navigation.getParam("placeID")
+      }
+    });
+    this.setState({ warnDist: this.props.navigation.getParam("warnDist") });
+    console.log(this.state);
   }
+
   render() {
     openDrawer = () => {
       this.drawer._root.open();
     };
     return (
       <View style={styles.container}>
-        <Text>{this.props.navigation.getParam("destinationName")}</Text>
-        <Text>{this.props.navigation.getParam("placeID")}</Text>
-        <Text>{this.props.navigation.getParam("destLat")}</Text>
-        <Text>{this.props.navigation.getParam("destLong")}</Text>
-        <Text>{this.props.navigation.getParam("warnDist")}</Text>
-        {/*<Text>{this.props.navigation.getParam("destLat")}</Text>
-        <Text>{this.props.navigation.getParam("destLong")}</Text>*/}
+        <Text>{this.state.current.latitude}</Text>
+        <Text>{this.state.current.longitude}</Text>
+
+        <Text>{this.state.destination.latitude}</Text>
+        <Text>{this.state.destination.longitude}</Text>
+
+        <Text>{this.state.warnDist}</Text>
 
         <MapView
           style={styles.mapStyle}
           showsUserLocation={true}
           rotateEnabled={false}
           region={{
-            latitude: this.state.latitude,
-            longitude: this.state.longitude,
+            latitude: this.state.current.latitude,
+            longitude: this.state.current.longitude,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
           }}
         >
           <MapView.Circle
-            center={this.destination}
+            center={this.state.destination}
             radius={500} //in meters
             strokeWidth={2}
             strokeColor="#3399ff"
             fillColor="#80bfff"
           />
-          <Marker coordinate={this.destination} />
+          <Marker coordinate={this.state.destination} />
         </MapView>
       </View>
     );

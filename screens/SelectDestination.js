@@ -18,7 +18,7 @@ class SelectDestination extends React.Component {
     super(props);
     this.state = {
       selectedDestination: null, //location object from the selected child prop gets passed here
-      warningDistance: " "
+      warningDistance: 0
     };
   }
 
