@@ -6,13 +6,13 @@ import {
   Button,
   Icon,
   Body,
-  Title,
   Right,
-  Drawer,
   Container,
   Footer,
   FooterTab,
-  Content
+  Content,
+  Item,
+  Input
 } from "native-base";
 
 import MapView, { Marker } from "react-native-maps";
@@ -54,20 +54,40 @@ class HomeScreen extends React.Component {
       <Container>
         <Header style={styles.header}>
           <Left style={{ flex: 1 }}>
-            <Icon name="menu"></Icon>
+            <Button transparent onPress={ () => this.props.navigation.navigate("Navbar") }>
+            <Icon name="menu"/>
+            </Button>
           </Left>
 
           <Body style={{ flex: 1 }}>
-            <Text style={styles.text}>HomeScreen</Text>
+            <Text style={styles.text}>BA3</Text>
           </Body>
 
           <Right style={{ flex: 1 }}>
-            <Button transparent>
-              <Icon name="power"></Icon>
+            <Button transparent onPress={()=>{console.log("POWER")}}>
+              <Icon name="power"/>
             </Button>
           </Right>
         </Header>
         <Content>
+        <Button iconLeft
+            style={styles.button}
+            onPress={() => {
+              this.props.navigation.navigate("SelectDestination");
+              console.log("pressed SelectDestination button");
+            }}
+          >
+            <Icon name="navigate" style={styles.icons}/>
+            <Text style={styles.buttontxt}>Select Destination</Text>
+          </Button>
+          <Content style={styles.distance}>
+          <Item >
+          <Icon active name="bicycle" style={styles.bike}/>
+        <Input placeholder="Input Distance" 
+    placeholderTextColor= "gainsboro" style={styles.input} keyboardType={"numeric"}/>
+          <Text style={styles.textkm}>km</Text>
+          </Item>
+          </Content>
           <MapView
             style={styles.mapStyle}
             showsUserLocation={true}
@@ -82,14 +102,8 @@ class HomeScreen extends React.Component {
             <Marker coordinate={this.destination}></Marker>
           </MapView>
 
-          <Button
-            style={styles.button}
-            onPress={() => {
-              this.props.navigation.navigate("SelectDestination");
-              console.log("pressed SelectDestination button");
-            }}
-          >
-            <Text>Select Destination</Text>
+          <Button rounded style={styles.button2}>
+            <Text style = {styles.buttontxt2}>Start</Text>
           </Button>
           {/*
           <Button
@@ -114,13 +128,13 @@ class HomeScreen extends React.Component {
             }}
           />*/}
         </Content>
-        <Footer>
+        {/* <Footer>
           <FooterTab>
             <Button full>
               <Text>Footer</Text>
             </Button>
           </FooterTab>
-        </Footer>
+        </Footer> */}
       </Container>
     );
   }
@@ -129,32 +143,83 @@ class HomeScreen extends React.Component {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+  buttontxt2:{
+    color: "white",
+    fontSize: 17
+  },
+  button2:{
+    alignSelf: "center",
+    width: 100,
+    backgroundColor: "lightskyblue",
+    marginTop: 15,
+    justifyContent: "center"
+  },
+  bike:{
+    marginLeft: 10,
+    marginRight: 2,
+    color: "lightskyblue"
+  },
+  buttontxt:{
+    color: "lightsteelblue",
+    marginLeft:15
+  },
+  icons:{
+    color: "lightskyblue"
+  },
+  textkm:{
+    color: "lightsteelblue",
+    marginRight: 10
+    // justifyContent: "center",
+  },
+  distance:{
+    flexDirection:"row",
+    // alignItems:"center",
+    width: Dimensions.get("window").width * 0.9,
+    alignSelf:"center",
+    marginBottom: 15
+  },
+  input: {
+    // borderColor: "lightgrey",
+    // borderWidth: 1,
+    width: 252,
+    height: 40,
+    fontSize:14,
+    // textAlign: "center",
+    alignSelf: "center",
+    // marginRight: 20,
+    color: "lightsteelblue"
+    // marginBottom: 15
+  },
   container: {
     flex: 1
     //backgroundColor: "#fff",
   },
   text: {
+    alignSelf:"center",
     color: "white",
-    fontFamily: "Roboto",
+    fontFamily: 'Roboto',
     fontSize: 15
   },
   button: {
-    position: "absolute",
+    // position: "absolute",
     backgroundColor: "white",
-    zIndex: 10,
+    // zIndex: 10,
     width: Dimensions.get("window").width * 0.9,
-    padding: 15,
-    margin: 15
+    margin: 15,
+    justifyContent: "flex-start",
+    alignSelf: "center"
   },
   mapStyle: {
+    alignSelf: "center",
     flex: 1,
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+    width: Dimensions.get("window").width * 0.9,
+    height: Dimensions.get("window").width * 0.9,
     zIndex: -1
   },
   header: {
     paddingRight: 15,
     paddingLeft: 15,
-    marginTop: StatusBar.currentHeight
+    marginTop: StatusBar.currentHeight,
+    backgroundColor: "lightskyblue",
   }
 });
