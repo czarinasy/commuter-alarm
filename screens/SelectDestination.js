@@ -11,14 +11,14 @@ import {
 } from "react-native";
 import { GoogleAutoComplete } from "react-native-google-autocomplete";
 import LocationItem from "../components/LocationItem";
-const API_KEY = "AIzaSyCMaoEDwHYWZ-eXOnTfg6SaSR8xSqrg_gM";
+const API_KEY = "AIzaSyB8NsyHAo3C-dtiZOnAeKBPl0qU7ckgTAQ";
 
 class SelectDestination extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedDestination: null, //location object from the selected child prop gets passed here
-      warningDistance: null
+      warningDistance: " "
     };
   }
 
@@ -99,16 +99,18 @@ class SelectDestination extends React.Component {
             </React.Fragment>
           )}
         </GoogleAutoComplete>
+        <Text>Selected Warning Distance = {this.state.warningDistance}</Text>
         <Picker
-          selectedValue={this.state.language}
+          selectedValue={this.state.warningDistance}
           style={{ height: 50, width: 100 }}
-          onValueChange={(itemValue, itemIndex) =>
-            this.setState({ language: itemValue })
+          onValueChange={itemValue =>
+            this.setState({ warningDistance: itemValue })
           }
         >
-          <Picker.Item label="1 km" value="km1" />
-          <Picker.Item label="3 km" value="km3" />
-          <Picker.Item label="5 km" value="km5" />
+          <Picker.Item label="0 km" value="0" />
+          <Picker.Item label="1 km" value="1" />
+          <Picker.Item label="3 km" value="3" />
+          <Picker.Item label="5 km" value="5" />
         </Picker>
         <Button
           title="Next"
@@ -121,7 +123,8 @@ class SelectDestination extends React.Component {
                 destLat: this.state.selectedDestination.locationObject.geometry
                   .location.lat,
                 destLong: this.state.selectedDestination.locationObject.geometry
-                  .location.lng
+                  .location.lng,
+                warnDist: this.state.warningDistance
               });
             }
           }}

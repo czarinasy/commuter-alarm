@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, Dimensions, StatusBar } from "react-native";
 
 import MapView, { Marker } from "react-native-maps";
-const API_KEY = "AIzaSyCMaoEDwHYWZ-eXOnTfg6SaSR8xSqrg_gM";
+const GOOGLE_API_KEY = "AIzaSyB8NsyHAo3C-dtiZOnAeKBPl0qU7ckgTAQ";
 
 const destination = { latitude: 37.771707, longitude: -122.4053769 };
 
@@ -54,6 +54,7 @@ class HomeScreen extends React.Component {
         <Text>{this.props.navigation.getParam("placeID")}</Text>
         <Text>{this.props.navigation.getParam("destLat")}</Text>
         <Text>{this.props.navigation.getParam("destLong")}</Text>
+        <Text>{this.props.navigation.getParam("warnDist")}</Text>
         {/*<Text>{this.props.navigation.getParam("destLat")}</Text>
         <Text>{this.props.navigation.getParam("destLong")}</Text>*/}
 
