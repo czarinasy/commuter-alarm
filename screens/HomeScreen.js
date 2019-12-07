@@ -16,9 +16,6 @@ import {
 } from "native-base";
 
 import MapView, { Marker } from "react-native-maps";
-const API_KEY = "AIzaSyCMaoEDwHYWZ-eXOnTfg6SaSR8xSqrg_gM";
-
-const destination = { latitude: 37.771707, longitude: -122.4053769 };
 
 // The home screen can access multiple other screens through different navigation buttons
 class HomeScreen extends React.Component {
@@ -54,8 +51,11 @@ class HomeScreen extends React.Component {
       <Container>
         <Header style={styles.header}>
           <Left style={{ flex: 1 }}>
-            <Button transparent onPress={ () => this.props.navigation.navigate("Navbar") }>
-            <Icon name="menu"/>
+            <Button
+              transparent
+              onPress={() => this.props.navigation.navigate("Navbar")}
+            >
+              <Icon name="menu" />
             </Button>
           </Left>
 
@@ -64,29 +64,39 @@ class HomeScreen extends React.Component {
           </Body>
 
           <Right style={{ flex: 1 }}>
-            <Button transparent onPress={()=>{console.log("POWER")}}>
-              <Icon name="power"/>
+            <Button
+              transparent
+              onPress={() => {
+                console.log("POWER");
+              }}
+            >
+              <Icon name="power" />
             </Button>
           </Right>
         </Header>
         <Content>
-        <Button iconLeft
+          <Button
+            iconLeft
             style={styles.button}
             onPress={() => {
               this.props.navigation.navigate("SelectDestination");
               console.log("pressed SelectDestination button");
             }}
           >
-            <Icon name="navigate" style={styles.icons}/>
+            <Icon name="navigate" style={styles.icons} />
             <Text style={styles.buttontxt}>Select Destination</Text>
           </Button>
           <Content style={styles.distance}>
-          <Item >
-          <Icon active name="bicycle" style={styles.bike}/>
-        <Input placeholder="Input Distance" 
-    placeholderTextColor= "gainsboro" style={styles.input} keyboardType={"numeric"}/>
-          <Text style={styles.textkm}>km</Text>
-          </Item>
+            <Item>
+              <Icon active name="bicycle" style={styles.bike} />
+              <Input
+                placeholder="Input Distance"
+                placeholderTextColor="gainsboro"
+                style={styles.input}
+                keyboardType={"numeric"}
+              />
+              <Text style={styles.textkm}>km</Text>
+            </Item>
           </Content>
           <MapView
             style={styles.mapStyle}
@@ -103,7 +113,7 @@ class HomeScreen extends React.Component {
           </MapView>
 
           <Button rounded style={styles.button2}>
-            <Text style = {styles.buttontxt2}>Start</Text>
+            <Text style={styles.buttontxt2}>Start</Text>
           </Button>
           {/*
           <Button
@@ -143,39 +153,39 @@ class HomeScreen extends React.Component {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-  buttontxt2:{
+  buttontxt2: {
     color: "white",
     fontSize: 17
   },
-  button2:{
+  button2: {
     alignSelf: "center",
     width: 100,
     backgroundColor: "lightskyblue",
     marginTop: 15,
     justifyContent: "center"
   },
-  bike:{
+  bike: {
     marginLeft: 10,
     marginRight: 2,
     color: "lightskyblue"
   },
-  buttontxt:{
+  buttontxt: {
     color: "lightsteelblue",
-    marginLeft:15
+    marginLeft: 15
   },
-  icons:{
+  icons: {
     color: "lightskyblue"
   },
-  textkm:{
+  textkm: {
     color: "lightsteelblue",
     marginRight: 10
     // justifyContent: "center",
   },
-  distance:{
-    flexDirection:"row",
+  distance: {
+    flexDirection: "row",
     // alignItems:"center",
     width: Dimensions.get("window").width * 0.9,
-    alignSelf:"center",
+    alignSelf: "center",
     marginBottom: 15
   },
   input: {
@@ -183,7 +193,7 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     width: 252,
     height: 40,
-    fontSize:14,
+    fontSize: 14,
     // textAlign: "center",
     alignSelf: "center",
     // marginRight: 20,
@@ -195,9 +205,9 @@ const styles = StyleSheet.create({
     //backgroundColor: "#fff",
   },
   text: {
-    alignSelf:"center",
+    alignSelf: "center",
     color: "white",
-    fontFamily: 'Roboto',
+    fontFamily: "Roboto",
     fontSize: 15
   },
   button: {
@@ -220,6 +230,6 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     paddingLeft: 15,
     marginTop: StatusBar.currentHeight,
-    backgroundColor: "lightskyblue",
+    backgroundColor: "lightskyblue"
   }
 });
