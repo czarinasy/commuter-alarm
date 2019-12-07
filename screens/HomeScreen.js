@@ -16,7 +16,6 @@ import {
 } from "native-base";
 
 import MapView, { Marker } from "react-native-maps";
-const API_KEY = "AIzaSyCMaoEDwHYWZ-eXOnTfg6SaSR8xSqrg_gM";
 
 const destination = { latitude: 37.771707, longitude: -122.4053769 };
 
