@@ -72,7 +72,7 @@ class HomeScreen extends React.Component {
         >
           <MapView.Circle
             center={this.state.destination}
-            radius={500} //in meters
+            radius={this.state.warnDist * 1000} //in meters
             strokeWidth={2}
             strokeColor="#3399ff"
             fillColor="#80bfff"
