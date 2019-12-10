@@ -33,19 +33,19 @@ class HomeScreen extends React.Component {
     super(props);
     (this.state = {
       latitude: 0,
-      longitude: 0,
+      longitude: 0
 
       // NOTIF
-      scheduled: false,
-      time: new Date().toLocaleString(),
-      scheduledTimes: []
+      //scheduled: false,
+      //time: new Date().toLocaleString(),
+      //scheduledTimes: []
     }),
       (this.destination = {
         latitude: 14.61828,
         longitude: 121.04976
       });
     // NOTIF
-    this.createLocalNotification = this.createLocalNotification.bind(this);
+    this.sendPushNotification = this.sendPushNotification.bind(this);
   }
   makeVibration() {
     Vibration.vibrate();
@@ -94,7 +94,7 @@ class HomeScreen extends React.Component {
     try {
       const alertTime = new Date().getTime() + 500;
       const localNotification = {
-        title: "Notification Scheduled at:",
+        title: "You are arriving at your stop soon.",
         body: new Date(alertTime).toLocaleString(),
         ios: {
           sound: true
@@ -107,6 +107,8 @@ class HomeScreen extends React.Component {
       };
 
       Notifications.presentLocalNotificationAsync(localNotification);
+      this.makeVibration();
+      Alert.alert("You are arriving at your stop soon.");
     } catch (e) {
       console.error("cannot create notification: " + e);
     }
