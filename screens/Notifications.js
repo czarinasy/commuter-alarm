@@ -1,15 +1,13 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-class Notifications extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.text}>Notifications</Text>
-      </View>
-    );
-  }
-}
+const Notifications = () => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>Notifications</Text>
+    </View>
+  );
+};
 
 export default Notifications;
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, Dimensions, StatusBar } from "react-native";
+import { StyleSheet, Text, Dimensions, StatusBar, Alert } from "react-native";
 import {
   Header,
   Left,
@@ -13,53 +13,70 @@ import {
   Input
 } from "native-base";
 import MapView, { Marker } from "react-native-maps";
-import SelectDestination from "./SelectDestination";
+import SelectDestination from "../components/SelectDestination";
 import * as Permissions from "expo-permissions";
+import * as Font from "expo-font";
 
-const HomeScreen = props => {
+const HomeScreen = () => {
+  const [isFontReady, setIsFontReady] = useState(false);
+
+  useEffect(() => {
+    const loadFont = async () => {
+      return await Font.loadAsync({
+        righteous: require("../node_modules/native-base/Fonts/Roboto.ttf")
+      });
+      setIsFontReady(true);
+    };
+    loadFont();
+  });
+
   const [current, setCurrent] = useState({
+    latitude: 14.6395,
+    longitude: 121.0781,
+    latitudeDelta: 0.005,
+    longitudeDelta: 0.005
+  });
+
+  const [destination, setDestination] = useState({
     latitude: 0,
     longitude: 0
   });
-  const [destination, setDestination] = useState({
-    latitude: 14.61828,
-    longitude: 121.04976
-  });
 
   useEffect(() => {
-    const permissionHandler = async () => {
+    const permisionsHandler = async () => {
       const { status } = await Permissions.askAsync(
         Permissions.LOCATION
       ).catch(error => console.error(error));
-
-      if (status !== "granted") {
+      if (status === "granted") {
+        navigator.geolocation.getCurrentPosition(pos => {
+          setCurrent({
+            ...current,
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude
+          });
+        });
+      } else {
         Alert.alert(
           "PERMISSION DENIED",
           "Permission to access location was denied.",
           [{ text: "Okay", style: "cancel" }]
         );
-      } else {
-        navigator.geolocation.getCurrentPosition(
-          currLocation => {
-            setCurrent({
-              latitude: currLocation.coords.latitude,
-              latitudeDelta: 0.005,
-              longitude: currLocation.coords.longitude,
-              longitudeDelta: 0.005
-            });
-          },
-          err => console.log(err)
-        );
       }
     };
-    permissionHandler();
-  }, [current]);
+    permisionsHandler();
+  });
 
-  useEffect(() => {
-    const selectDestinationHandler = selectedDestination => {
+  const setDestinationHandler = async selectedDestination => {
+    if (selectedDestination) {
       setDestination(selectedDestination);
-    };
-  }, [props.destination]);
+      if (destination) {
+        console.log(
+          "\n\n-------------------[HOMESCREEN] Selected Destination -------------------"
+        );
+        console.log(destination.address_components[0].long_name);
+      }
+    }
+  };
 
   return (
     <Container>
@@ -67,14 +84,13 @@ const HomeScreen = props => {
         <Left style={{ flex: 1 }}>
           <Button
             transparent
-            // onPress={)}
+            // onPress={}
           >
             <Icon name="menu" />
           </Button>
         </Left>
-
         <Body style={{ flex: 1 }}>
-          <Text style={styles.text}>BA3</Text>
+          {isFontReady && <Text style={styles.text}>BA3</Text>}
         </Body>
 
         <Right style={{ flex: 1 }}>
@@ -88,68 +104,36 @@ const HomeScreen = props => {
           </Button>
         </Right>
       </Header>
-      <Content>
-        </Content>
-        <SelectDestination></SelectDestination>;
-        <Content style={styles.distance}>
-          <Item>
-            <Icon active name="bicycle" style={styles.bike} />
-            <Input
-              placeholder="Input Distance"
-              placeholderTextColor="gainsboro"
-              style={styles.input}
-              keyboardType={"numeric"}
-            />
-            <Text style={styles.textkm}>km</Text>
-          </Item>
-        </Content>
-        <MapView
-          style={styles.mapStyle}
-          showsUserLocation={true}
-          rotateEnabled={false}
-          region={{
-            latitude: current.latitude,
-            longitude: current.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421
-          }}
-        >
-          <Marker coordinate={destination}></Marker>
-        </MapView>
-
-        <Button rounded style={styles.button2}>
-          <Text style={styles.buttontxt2}>Start</Text>
-        </Button>
-        {/*
-      <Button
-        title="SetWarnDistance"
-        onPress={() => {
-          this.props.navigation.navigate("SetWarnDistance");
-          console.log("pressed SetWarnDistance button");
-        }}
-      />
-      <Button
-        title="Sidebar"
-        onPress={() => {
-          this.props.navigation.navigate("Sidebar");
-          console.log("pressed Sidebar button");
-        }}
-      />
-      <Button
-        title="Tracker"
-        onPress={() => {
-          this.props.navigation.navigate("Tracker");
-          console.log("pressed Tracker button");
-        }}
-      />*/}
+      <SelectDestination onSelect={setDestinationHandler} />
+      <Content style={styles.distance}>
+        <Item>
+          <Icon active name="bicycle" style={styles.bike} />
+          <Input
+            placeholder="Input Distance"
+            placeholderTextColor="gainsboro"
+            style={styles.input}
+            keyboardType={"numeric"}
+          />
+          <Text style={styles.textkm}>km</Text>
+        </Item>
       </Content>
-      {/* <Footer>
-      <FooterTab>
-        <Button full>
-          <Text>Footer</Text>
-        </Button>
-      </FooterTab>
-    </Footer> */}
+      <MapView
+        style={styles.mapStyle}
+        showsUserLocation={true}
+        rotateEnabled={false}
+        region={{
+          latitude: current.latitude,
+          longitude: current.longitude,
+          latitudeDelta: current.latitudeDelta,
+          longitudeDelta: current.longitudeDelta
+        }}
+      >
+        <Marker coordinate={destination}></Marker>
+      </MapView>
+
+      <Button rounded style={styles.button2}>
+        <Text style={styles.buttontxt2}>Start</Text>
+      </Button>
     </Container>
   );
 };

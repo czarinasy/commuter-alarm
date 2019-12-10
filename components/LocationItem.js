@@ -1,24 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 
 const LocationItem = props => {
-  const [location, setLocation] = useState({});
-
-  useEffect(() => {
-    locationFetchHandler = async () => {
-      //the entiire location object from the Google Places API
-      const res = await this.props.fetchDetails(this.props.place_id);
-      console.log("result", res); //prints selected location item to console
-      // Alert.alert("Selected Destination: " + res.name, JSON.stringify(res)); //shows selected item as alert on mobile
-
-      setLocation(res);
-      //passes the chosen location object to parent (SelectDestination)
-      props.setDestinationFromChild(location);
-    };
-  }, [location]);
+  const selectLocationHandler = async () => {
+    const location = await props.fetchDetails(props.place_id);
+    console.log(
+      "\n\n-------------------[LOCATION ITEM] Selected Location: -------------------"
+    );
+    console.log(location.address_components[0].long_name);
+    Alert.alert(
+      "Selected Destination: " + location.address_components[0].long_name,
+      JSON.stringify(location)
+    );
+    props.onSetLocation(location);
+  };
 
   return (
-    <TouchableOpacity style={styles.root} onPress={locationFetchHandler}>
+    <TouchableOpacity style={styles.root} onPress={selectLocationHandler}>
       <Text>{props.description}</Text>
     </TouchableOpacity>
   );

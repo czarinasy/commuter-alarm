@@ -8,22 +8,30 @@ import {
   ActivityIndicator,
   Dimensions
 } from "react-native";
-import { Icon, Button } from "native-base";
+import { Icon, Button, Header } from "native-base";
 import { GoogleAutoComplete } from "react-native-google-autocomplete";
-import LocationItem from "../components/LocationItem";
+import LocationItem from "./LocationItem";
 import { GOOGLE_API_KEY } from "../API_KEYS";
 
 const SelectDestination = props => {
-  const [selectedDestination, setSelectedDestination] = useState({
-    latitude: null,
-    longitude: null
-  });
+  const [selectedDestination, setSelectedDestination] = useState({});
+  const [hasSelected, setHasSelected] = useState(false);
+
+  const selectDestinationHandler = async location => {
+    if (location) {
+      console.log(location.address_components[0].long_name);
+      setSelectedDestination(location);
+      if (selectedDestination) {
+        setHasSelected(true);
+        console.log(
+          "\n\n-------------------[SELECT DESTINATION] Selected Destination -------------------"
+        );
+        console.log(selectedDestination.address_components[0].long_name);
+      }
+    }
+  };
   return (
     <View style={styles.container}>
-      <Text style={styles.status}>
-        Selected Destination: {printSelectedDestination}
-      </Text>
-
       {/*GOOGLE PLACES API*/}
       <GoogleAutoComplete
         apiKey={GOOGLE_API_KEY()}
@@ -39,8 +47,7 @@ const SelectDestination = props => {
           inputValue
         }) => (
           <React.Fragment>
-            {console.log("locationResults", locationResults)}
-
+            {/*console.log("locationResults", locationResults)*/}
             {/*prints out all location options*/}
             <View style={styles.inputWrapper}>
               {/*search box*/}
@@ -57,12 +64,11 @@ const SelectDestination = props => {
             <Button
               title="Select"
               style={styles.button}
-              onPress={selectDestinationHandler.bind(this, {
-                selectedDestination
-              })}
+              onPress={() => props.onSelect(selectedDestination)}
             >
               <Text style={styles.txt}>Confirm</Text>
             </Button>
+
             {isSearching && (
               <ActivityIndicator
                 size="large"
@@ -70,7 +76,6 @@ const SelectDestination = props => {
                 style={{ marginTop: 10 }}
               />
             )}
-
             <ScrollView>
               {locationResults.map(el => (
                 //each location item
@@ -80,7 +85,7 @@ const SelectDestination = props => {
                   key={el.id}
                   fetchDetails={fetchDetails}
                   //custom props. calls the function on this file
-                  setDestinationFromChild={setSelectedDestination}
+                  onSetLocation={selectDestinationHandler}
                 />
               ))}
             </ScrollView>
@@ -119,8 +124,9 @@ const styles = StyleSheet.create({
   },
   container: {
     margin: 15,
+    padding: 10,
     backgroundColor: "#fff",
-    // alignItems: "center",
+    alignItems: "center",
     // justifyContent: "center",
     width: Dimensions.get("window").width * 0.9
   },

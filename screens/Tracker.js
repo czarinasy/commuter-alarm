@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import GetLocation from "../components/GetLocation";
 import { GOOGLE_API_KEY } from "../API_KEYS";
@@ -9,65 +9,42 @@ function degrees_to_radians(degrees) {
   return degrees * (pi / 180);
 }
 
-class Tracker extends React.Component {
-  state = {
-    current: {
-      latitude: 0,
-      longitude: 0
-    },
-    destination: {
-      latitude: 0,
-      longitude: 0
-    },
-    eta: 0
-  };
-  componentDidMount() {
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        this.setState({
-          current: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          }
-        });
-      },
-      err => console.log(err)
-    );
-    this.setState({
-      destination: {
-        latitude: this.props.navigation.getParam("destLat"),
-        longitude: this.props.navigation.getParam("destLong")
-      }
-    });
-  }
-  getETA() {
-    //console.log("getETA");
-    //var orig = "14.6404507,121.0737046";
-    var orig = this.state.current.latitude + "," + this.state.current.longitude;
-    //var dest = "14.6368585,121.0744894";
-    var dest =
-      this.state.destination.latitude + "," + this.state.destination.longitude;
-    var url =
-      "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" +
-      orig +
-      "&destinations=" +
-      dest +
-      "&key=" +
-      GOOGLE_API_KEY();
-    //console.log(url);
-    const fetchDistMat = async () => {
-      const response = await fetch(url);
-      const json = await response.json();
-      console.log(json);
-    };
+const Tracker = () => {
+  const [current, setCurrent] = useState({ latitude: 0, longitude: 0 });
 
-    fetchDistMat();
-  }
-  inRadius() {
-    cLat = degrees_to_radians(this.state.current.latitude);
-    cLong = degrees_to_radians(this.state.current.longitude);
-    dLat = degrees_to_radians(this.state.destination.latitude);
-    dLong = degrees_to_radians(this.state.destination.longitude);
+  const [destination, setDestination] = useState({ latitude: 0, longitude: 0 });
+
+  const [eta, setEta] = useState(0);
+
+  // Distance Matrix: tracks ETA everytime current and/or destination changes
+  useEffect(
+    (getETA = () => {
+      const fetchDistMat = async () => {
+        const response = await fetch(
+          "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" +
+            current.latitude +
+            "," +
+            current.longitude +
+            "&destinations=" +
+            destination.latitude +
+            "," +
+            destination.longitude +
+            "&key=" +
+            GOOGLE_API_KEY()
+        );
+        const json = await response.json();
+        console.log(json);
+      };
+      fetchDistMat();
+    }),
+    [current, destination]
+  );
+
+  const inRadius = () => {
+    cLat = degrees_to_radians(current.latitude);
+    cLong = degrees_to_radians(current.longitude);
+    dLat = degrees_to_radians(destination.latitude);
+    dLong = degrees_to_radians(destination.longitude);
     //console.log(cLat);
     difLat = cLat - dLat;
     difLong = cLong - dLong;
@@ -85,24 +62,23 @@ class Tracker extends React.Component {
     } else {
       return "Outside the area";
     }
-  }
-  render() {
-    return (
-      <View style={styles.container}>
-        {/*<Text style={styles.text}>Tracker</Text>
+  };
+
+  return (
+    <View style={styles.container}>
+      {/*<Text style={styles.text}>Tracker</Text>
         <Text>Latitude: {this.state.latitude}</Text>
         <Text>Longitude: {this.state.longitude}</Text>
     <GetLocation onGetLocation={this.getLocationHandler} />*/}
-        <Text>{this.props.navigation.getParam("destinationName")}</Text>
+      <Text>{destinationName}</Text>
 
-        <Text>{this.state.destination.latitude}</Text>
-        <Text>{this.state.destination.longitude}</Text>
-        <Text>{this.inRadius()}</Text>
-        {this.getETA()}
-      </View>
-    );
-  }
-}
+      <Text>{destination.latitude}</Text>
+      <Text>{destination.longitude}</Text>
+      <Text>{inRadius}</Text>
+      {getETA}
+    </View>
+  );
+};
 
 export default Tracker;
 

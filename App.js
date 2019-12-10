@@ -1,10 +1,10 @@
 import React from "react";
-import AppContainer from "./AppContainer";
+import HomeScreen from "./screens/HomeScreen";
 
 // This is the base of the entire program
 // This calls the container that has all the screens connected to it
-export default class App extends React.Component {
-  render() {
-    return <AppContainer />;
-  }
-}
+const App = () => {
+  return <HomeScreen />;
+};
+
+export default App;
