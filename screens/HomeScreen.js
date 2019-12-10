@@ -8,8 +8,6 @@ import {
   Body,
   Right,
   Container,
-  Footer,
-  FooterTab,
   Content,
   Item,
   Input
@@ -22,6 +20,9 @@ const destination = { latitude: 37.771707, longitude: -122.4053769 };
 
 // The home screen can access multiple other screens through different navigation buttons
 class HomeScreen extends React.Component {
+  static navigationOptions={
+    drawerLabel: "Home"
+  };
   constructor(props) {
     super(props);
     (this.state = {
@@ -47,23 +48,21 @@ class HomeScreen extends React.Component {
     );
   }
   render() {
-    openDrawer = () => {
-      this.drawer._root.open();
-    };
     return (
       <Container>
         <Header style={styles.header}>
-          <Left style={{ flex: 1 }}>
-            <Button transparent onPress={ () => this.props.navigation.navigate("Navbar") }>
+          <Left style={{ flex: 1, marginTop: StatusBar.currentHeight-10 }}>
+            <Button transparent onPress={ () => this.props.navigation.openDrawer() }
+            style = {{justifyContent: "center"}}>
             <Icon name="menu"/>
             </Button>
           </Left>
 
-          <Body style={{ flex: 1 }}>
+          <Body style={{ flex: 1, marginTop: StatusBar.currentHeight-10 }}>
             <Text style={styles.text}>BA3</Text>
           </Body>
 
-          <Right style={{ flex: 1 }}>
+          <Right style={{ flex: 1, marginTop: StatusBar.currentHeight-10 }}>
             <Button transparent onPress={()=>{console.log("POWER")}}>
               <Icon name="power"/>
             </Button>
@@ -105,36 +104,7 @@ class HomeScreen extends React.Component {
           <Button rounded style={styles.button2}>
             <Text style = {styles.buttontxt2}>Start</Text>
           </Button>
-          {/*
-          <Button
-            title="SetWarnDistance"
-            onPress={() => {
-              this.props.navigation.navigate("SetWarnDistance");
-              console.log("pressed SetWarnDistance button");
-            }}
-          />
-          <Button
-            title="Sidebar"
-            onPress={() => {
-              this.props.navigation.navigate("Sidebar");
-              console.log("pressed Sidebar button");
-            }}
-          />
-          <Button
-            title="Tracker"
-            onPress={() => {
-              this.props.navigation.navigate("Tracker");
-              console.log("pressed Tracker button");
-            }}
-          />*/}
         </Content>
-        {/* <Footer>
-          <FooterTab>
-            <Button full>
-              <Text>Footer</Text>
-            </Button>
-          </FooterTab>
-        </Footer> */}
       </Container>
     );
   }
@@ -198,7 +168,8 @@ const styles = StyleSheet.create({
     alignSelf:"center",
     color: "white",
     fontFamily: 'Roboto',
-    fontSize: 15
+    fontSize: 15,
+    fontWeight: "bold"
   },
   button: {
     // position: "absolute",
@@ -210,6 +181,8 @@ const styles = StyleSheet.create({
     alignSelf: "center"
   },
   mapStyle: {
+    marginTop: 10,
+    marginBottom: 10,
     alignSelf: "center",
     flex: 1,
     width: Dimensions.get("window").width * 0.9,
@@ -219,7 +192,8 @@ const styles = StyleSheet.create({
   header: {
     paddingRight: 15,
     paddingLeft: 15,
-    marginTop: StatusBar.currentHeight,
-    backgroundColor: "lightskyblue",
+    height: 70,
+    //marginTop: StatusBar.currentHeight,
+    backgroundColor: "lightskyblue"
   }
 });

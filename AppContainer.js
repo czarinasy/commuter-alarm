@@ -1,12 +1,11 @@
 import { StyleSheet } from "react-native";
 
-import { createAppContainer } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
+import { createAppContainer, stackNavigator } from "react-navigation";
+import { createDrawerNavigator } from 'react-navigation-drawer';
 
 import HomeScreen from "./screens/HomeScreen";
 import Ringtone from "./screens/Ringtone";
 import SelectDestination from "./screens/SelectDestination";
-import Navbar from "./screens/Navbar";
 import Notifications from "./screens/Notifications";
 import SetWarnDistance from "./screens/SetWarnDistance";
 import MyFavorites from "./screens/MyFavorites";
@@ -14,7 +13,7 @@ import Settings from "./screens/Settings";
 import Tracker from "./screens/Tracker";
 
 // This is a directory of all the screens
-const NavigationStack = createStackNavigator({
+const NavigationStack = createDrawerNavigator({
   HomeScreen: {
     screen: HomeScreen,
     navigationOptions: {
@@ -23,14 +22,20 @@ const NavigationStack = createStackNavigator({
   },
   SelectDestination: { screen: SelectDestination },
   SetWarnDistance: { screen: SetWarnDistance },
-  Navbar: { screen: Navbar },
   Ringtone: { screen: Ringtone },
   Notifications: { screen: Notifications },
   MyFavorites: { screen: MyFavorites },
   Settings: { screen: Settings },
-  Tracker: { screen: Tracker },
-  headerMode: "none"
-});
+  Tracker: { screen: Tracker }
+  // {headerLayoutPreset: 'center'}
+},
+{drawerBackgroundColor: "lightskyblue",
+drawerWidth: 250,
+contentOptions:{
+  labelStyle: {
+    color: "white"
+  }
+}});
 
 // This is the container for the app
 // You can think of it as the "main" work area
