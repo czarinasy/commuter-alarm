@@ -33,8 +33,8 @@ class HomeScreen extends React.Component {
     super(props);
     (this.state = {
       latitude: 0,
-      longitude: 0
-
+      longitude: 0,
+      arrived: false
       // NOTIF
       //scheduled: false,
       //time: new Date().toLocaleString(),
@@ -43,9 +43,9 @@ class HomeScreen extends React.Component {
       (this.destination = {
         latitude: 14.61828,
         longitude: 121.04976
-      });
-    // NOTIF
-    this.sendPushNotification = this.sendPushNotification.bind(this);
+      }),
+      // NOTIF
+      (this.sendPushNotification = this.sendPushNotification.bind(this));
   }
   makeVibration() {
     Vibration.vibrate();
@@ -113,8 +113,17 @@ class HomeScreen extends React.Component {
       console.error("cannot create notification: " + e);
     }
   }
+  componentDidUpdate() {
+    if (this.state.arrived) {
+      this.sendPushNotification();
+    }
+  }
 
   componentDidMount() {
+    setTimeout(() => {
+      this.setState({ arrived: true });
+    }, 5000);
+
     navigator.geolocation.getCurrentPosition(
       position => {
         this.setState({
