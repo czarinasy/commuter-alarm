@@ -89,6 +89,7 @@ class HomeScreen extends React.Component {
       console.error("cannot create notification: " + e);
     }
   }*/
+  // NOTIF
   sendPushNotification() {
     try {
       const alertTime = new Date().getTime() + 500;
