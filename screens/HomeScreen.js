@@ -27,7 +27,6 @@ import MapView, { Marker } from "react-native-maps";
 import * as Permissions from "expo-permissions";
 import { Notifications } from "expo";
 import { Audio } from "expo-av";
-
 // The home screen can access multiple other screens through different navigation buttons
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -50,7 +49,9 @@ class HomeScreen extends React.Component {
       (this.handlePlaySound = this.handlePlaySound.bind(this));
   }
   makeVibration() {
-    Vibration.vibrate();
+    const DURATION = 10000;
+    const PATTERN = [1000, 2000, 3000];
+    Vibration.vibrate(PATTERN, true);
   }
   //NOTIF
   /*createLocalNotification(timer, localestring) {
@@ -111,7 +112,21 @@ class HomeScreen extends React.Component {
       Notifications.presentLocalNotificationAsync(localNotification);
       this.makeVibration();
       this.handlePlaySound();
-      Alert.alert("You are arriving at your stop soon.");
+      /*Alert.alert(
+        "You are arriving at your stop soon.",
+        new Date(alertTime).toLocaleString(),
+        [
+          {
+            text: "Ok",
+            onPress: () => {
+              Vibration.cancel();
+              console.log("Cancel Pressed");
+            },
+            style: "cancel"
+          }
+        ],
+        { cancelable: false }
+      );*/
     } catch (e) {
       console.error("cannot create notification: " + e);
     }
@@ -146,10 +161,26 @@ class HomeScreen extends React.Component {
   }
   handlePlaySound = async note => {
     const soundObject = new Audio.Sound();
-
+    const alertTime = new Date().getTime();
     try {
       let source = require("../assets/ring.mp3");
       await soundObject.loadAsync(source);
+      Alert.alert(
+        "You are arriving at your stop soon.",
+        new Date(alertTime).toLocaleString(),
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              Vibration.cancel();
+              soundObject.stopAsync();
+              console.log("Cancel Pressed");
+            },
+            style: "cancel"
+          }
+        ],
+        { cancelable: false }
+      );
       await soundObject
         .playAsync()
         .then(async playbackStatus => {
@@ -157,6 +188,7 @@ class HomeScreen extends React.Component {
             soundObject.unloadAsync();
           }, playbackStatus.playableDurationMillis);
         })
+
         .catch(error => {
           console.log(error);
         });
