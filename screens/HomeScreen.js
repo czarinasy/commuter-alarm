@@ -20,6 +20,11 @@ import { GOOGLE_API_KEY } from "../API_KEYS";
 let destName = "";
 let destLat = 0;
 let destLong = 0;
+function degrees_to_radians(degrees) {
+  var pi = Math.PI;
+  //console.log(degrees * (pi / 180));
+  return degrees * (pi / 180);
+}
 const HomeScreen = () => {
   const [isFontReady, setIsFontReady] = useState(false);
 
@@ -86,6 +91,7 @@ const HomeScreen = () => {
       }
     }
   };
+
   const fetchDistMat = async () => {
     const response = await fetch(
       "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" +
@@ -110,9 +116,34 @@ const HomeScreen = () => {
     console.log("eta");
     console.log(current);
     //console.log(destination);
-    fetchDistMat();
-  };
 
+    fetchDistMat();
+    console.log("rad");
+    inRadius();
+  };
+  const inRadius = () => {
+    cLat = degrees_to_radians(current.latitude);
+    cLong = degrees_to_radians(current.longitude);
+    dLat = degrees_to_radians(destLat);
+    dLong = degrees_to_radians(destLong);
+    //console.log(cLat);
+    const difLat = cLat - dLat;
+    const difLong = cLong - dLong;
+
+    const a =
+      Math.sin(difLat / 2) ** 2 +
+      Math.cos(dLat) * Math.cos(cLat) * Math.sin(difLong / 2) ** 2;
+    const c = 2 * Math.asin(Math.sqrt(a));
+    const r = 6371;
+    const val = c * r;
+    const radius = 0.5;
+    //console.log(val);
+    if (val <= radius) {
+      return "Inside the area";
+    } else {
+      return "Outside the area";
+    }
+  };
   return (
     <Container>
       <Header style={styles.header}>
