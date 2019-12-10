@@ -16,7 +16,10 @@ import MapView, { Marker } from "react-native-maps";
 import SelectDestination from "../components/SelectDestination";
 import * as Permissions from "expo-permissions";
 import * as Font from "expo-font";
-
+import { GOOGLE_API_KEY } from "../API_KEYS";
+let destName = "";
+let destLat = 0;
+let destLong = 0;
 const HomeScreen = () => {
   const [isFontReady, setIsFontReady] = useState(false);
 
@@ -74,8 +77,40 @@ const HomeScreen = () => {
           "\n\n-------------------[HOMESCREEN] Selected Destination -------------------"
         );
         console.log(destination.address_components[0].long_name);
+        console.log(destination.geometry.location.lat);
+        console.log(destination.geometry.location.lng);
+        destName = destination.address_components[0].long_name;
+        destLat = destination.geometry.location.lat;
+        destLong = destination.geometry.location.lng;
+        console.log(destName);
       }
     }
+  };
+  const fetchDistMat = async () => {
+    const response = await fetch(
+      "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" +
+        current.latitude +
+        "," +
+        current.longitude +
+        "&destinations=" +
+        destLat +
+        "," +
+        destLong +
+        "&key=" +
+        GOOGLE_API_KEY()
+    );
+    const json = await response.json();
+    console.log(json);
+  };
+  const checkVariables = () => {
+    console.log("check variables");
+    console.log(destName);
+    console.log(destLat);
+    console.log(destLong);
+    console.log("eta");
+    console.log(current);
+    //console.log(destination);
+    fetchDistMat();
   };
 
   return (
@@ -131,7 +166,7 @@ const HomeScreen = () => {
         <Marker coordinate={destination}></Marker>
       </MapView>
 
-      <Button rounded style={styles.button2}>
+      <Button rounded style={styles.button2} onPress={checkVariables}>
         <Text style={styles.buttontxt2}>Start</Text>
       </Button>
     </Container>
