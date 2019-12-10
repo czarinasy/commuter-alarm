@@ -26,6 +26,7 @@ import {
 import MapView, { Marker } from "react-native-maps";
 import * as Permissions from "expo-permissions";
 import { Notifications } from "expo";
+import { Audio } from "expo-av";
 
 // The home screen can access multiple other screens through different navigation buttons
 class HomeScreen extends React.Component {
@@ -45,7 +46,8 @@ class HomeScreen extends React.Component {
         longitude: 121.04976
       }),
       // NOTIF
-      (this.sendPushNotification = this.sendPushNotification.bind(this));
+      (this.sendPushNotification = this.sendPushNotification.bind(this)),
+      (this.handlePlaySound = this.handlePlaySound.bind(this));
   }
   makeVibration() {
     Vibration.vibrate();
@@ -108,6 +110,7 @@ class HomeScreen extends React.Component {
 
       Notifications.presentLocalNotificationAsync(localNotification);
       this.makeVibration();
+      this.handlePlaySound();
       Alert.alert("You are arriving at your stop soon.");
     } catch (e) {
       console.error("cannot create notification: " + e);
@@ -141,6 +144,26 @@ class HomeScreen extends React.Component {
     this.setState({ time: new Date().toLocaleString() });
     //}, 1000);
   }
+  handlePlaySound = async note => {
+    const soundObject = new Audio.Sound();
+
+    try {
+      let source = require("../assets/ring.mp3");
+      await soundObject.loadAsync(source);
+      await soundObject
+        .playAsync()
+        .then(async playbackStatus => {
+          setTimeout(() => {
+            soundObject.unloadAsync();
+          }, playbackStatus.playableDurationMillis);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   render() {
     openDrawer = () => {
