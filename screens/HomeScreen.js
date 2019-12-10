@@ -22,30 +22,29 @@ import {
   Item,
   Input
 } from "native-base";
-
 import MapView, { Marker } from "react-native-maps";
 import * as Permissions from "expo-permissions";
 import { Notifications } from "expo";
 import { Audio } from "expo-av";
+
 // The home screen can access multiple other screens through different navigation buttons
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
-    (this.state = {
-      latitude: 0,
-      longitude: 0,
-      arrived: false
-      // NOTIF
-      //scheduled: false,
-      //time: new Date().toLocaleString(),
-      //scheduledTimes: []
-    }),
-      (this.destination = {
+    this.state = {
+      current: {
+        latitude: 0,
+        longitude: 0
+      },
+      destination: {
         latitude: 14.61828,
         longitude: 121.04976
-      }),
-      // NOTIF
-      (this.sendPushNotification = this.sendPushNotification.bind(this)),
+      },
+      arrived: false
+    };
+
+    // NOTIF
+    (this.sendPushNotification = this.sendPushNotification.bind(this)),
       (this.handlePlaySound = this.handlePlaySound.bind(this));
   }
   makeVibration() {
@@ -53,45 +52,7 @@ class HomeScreen extends React.Component {
     const PATTERN = [1000, 2000, 3000];
     Vibration.vibrate(PATTERN, true);
   }
-  //NOTIF
-  /*createLocalNotification(timer, localestring) {
-    try {
-      const alertTime = new Date().getTime() + 500;
-      const localNotification = {
-        title: "Notification Scheduled at:",
-        body: new Date(alertTime).toLocaleString(),
-        ios: {
-          sound: true
-        },
-        android: {
-          sound: true,
-          priority: "high",
-          vibrate: true
-        }
-      };
 
-      const schedulingOptions = {
-        time: alertTime
-      };
-
-      Notifications.scheduleLocalNotificationAsync(
-        localNotification,
-        schedulingOptions
-      )
-        .then(id =>
-          this.setState({
-            scheduledTimes: [
-              ...this.state.scheduledTimes,
-              new Date(alertTime).toLocaleString()
-            ],
-            scheduled: true
-          })
-        )
-        .catch(err => console.error("Error creating notification", err));
-    } catch (e) {
-      console.error("cannot create notification: " + e);
-    }
-  }*/
   // NOTIF
   sendPushNotification() {
     try {
@@ -108,25 +69,9 @@ class HomeScreen extends React.Component {
           vibrate: true
         }
       };
-
       Notifications.presentLocalNotificationAsync(localNotification);
       this.makeVibration();
       this.handlePlaySound();
-      /*Alert.alert(
-        "You are arriving at your stop soon.",
-        new Date(alertTime).toLocaleString(),
-        [
-          {
-            text: "Ok",
-            onPress: () => {
-              Vibration.cancel();
-              console.log("Cancel Pressed");
-            },
-            style: "cancel"
-          }
-        ],
-        { cancelable: false }
-      );*/
     } catch (e) {
       console.error("cannot create notification: " + e);
     }
@@ -145,8 +90,10 @@ class HomeScreen extends React.Component {
     navigator.geolocation.getCurrentPosition(
       position => {
         this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
+          current: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          }
         });
         console.log(this.state);
       },
@@ -155,10 +102,9 @@ class HomeScreen extends React.Component {
 
     // NOTIF
     Permissions.askAsync(Permissions.NOTIFICATIONS);
-    //setTimeout(() => {
-    this.setState({ time: new Date().toLocaleString() });
-    //}, 1000);
   }
+
+  // NOTIF
   handlePlaySound = async note => {
     const soundObject = new Audio.Sound();
     const alertTime = new Date().getTime();
@@ -258,13 +204,13 @@ class HomeScreen extends React.Component {
             showsUserLocation={true}
             rotateEnabled={false}
             region={{
-              latitude: this.state.latitude,
-              longitude: this.state.longitude,
+              latitude: this.state.current.latitude,
+              longitude: this.state.current.longitude,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421
             }}
           >
-            <Marker coordinate={this.destination}></Marker>
+            <Marker coordinate={this.state.destination}></Marker>
           </MapView>
 
           <Button
@@ -274,28 +220,6 @@ class HomeScreen extends React.Component {
           >
             <Text style={styles.buttontxt2}>Start</Text>
           </Button>
-          {/*
-          <Button
-            title="SetWarnDistance"
-            onPress={() => {
-              this.props.navigation.navigate("SetWarnDistance");
-              console.log("pressed SetWarnDistance button");
-            }}
-          />
-          <Button
-            title="Sidebar"
-            onPress={() => {
-              this.props.navigation.navigate("Sidebar");
-              console.log("pressed Sidebar button");
-            }}
-          />
-          <Button
-            title="Tracker"
-            onPress={() => {
-              this.props.navigation.navigate("Tracker");
-              console.log("pressed Tracker button");
-            }}
-          />*/}
         </Content>
         {/* <Footer>
           <FooterTab>
