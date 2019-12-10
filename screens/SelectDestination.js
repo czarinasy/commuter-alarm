@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,133 +12,84 @@ import { Icon, Button } from "native-base";
 import { GoogleAutoComplete } from "react-native-google-autocomplete";
 import LocationItem from "../components/LocationItem";
 import { GOOGLE_API_KEY } from "../API_KEYS";
-class SelectDestination extends React.Component {
-  static navigationOptions = {
-    title: "Search Destination",
-    headerStyle: {
-      backgroundColor: "lightskyblue"
-    },
-    headerTitleStyle: {
-      flex: 1,
-      marginLeft: 62,
-      fontSize: 15,
-      color: "white",
-      fontWeight: "normal"
-    }
-  };
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedDestination: null //location object from the selected child prop gets passed here
-    };
-  }
 
-  //handles the setting of state from child(ListItem) to parent(this file)
-  setDestinationFromChild = dataFromChild => {
-    this.setState({ selectedDestination: dataFromChild });
+const SelectDestination = props => {
+  const [selectedDestination, setSelectedDestination] = useState({
+    latitude: null,
+    longitude: null
+  });
+  return (
+    <View style={styles.container}>
+      <Text style={styles.status}>
+        Selected Destination: {printSelectedDestination}
+      </Text>
 
-    //for testing
-    console.log(
-      "\n\n-------------------THE CHOSEN LOCATION:-------------------"
-    );
-    console.log(
-      this.state.selectedDestination.locationObject.address_components[0]
-        .long_name
-    );
-  };
+      {/*GOOGLE PLACES API*/}
+      <GoogleAutoComplete
+        apiKey={GOOGLE_API_KEY()}
+        debounce={500}
+        minLength={3}
+        components="country:ph"
+      >
+        {({
+          handleTextChange,
+          locationResults,
+          fetchDetails,
+          isSearching,
+          inputValue
+        }) => (
+          <React.Fragment>
+            {console.log("locationResults", locationResults)}
 
-  printSelectedDestination() {
-    if (this.state.selectedDestination == null) {
-      return "None selected";
-    } else {
-      return this.state.selectedDestination.locationObject.address_components[0]
-        .long_name;
-    }
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.status}>
-          Selected Destination: {this.printSelectedDestination()}
-        </Text>
-
-        {/*GOOGLE PLACES API*/}
-        <GoogleAutoComplete
-          apiKey={GOOGLE_API_KEY()}
-          debounce={500}
-          minLength={3}
-          components="country:ph"
-        >
-          {({
-            handleTextChange,
-            locationResults,
-            fetchDetails,
-            isSearching,
-            inputValue
-          }) => (
-            <React.Fragment>
-              {console.log("locationResults", locationResults)}
-
-              {/*prints out all location options*/}
-              <View style={styles.inputWrapper}>
-                {/*search box*/}
-                <View style={styles.search}>
-                  <Icon name="ios-map" style={styles.map} />
-                  <TextInput
-                    style={styles.textInput}
-                    placeholder="Search..."
-                    onChangeText={handleTextChange}
-                    value={inputValue}
-                  />
-                </View>
-              </View>
-              <Button
-                title="Select"
-                style={styles.button}
-                onPress={() => {
-                  this.props.navigation.navigate("Tracker", {
-                    destinationName: this.state.selectedDestination
-                      .locationObject.address_components[0].long_name,
-                    placeID: this.state.selectedDestination.locationObject
-                      .place_id,
-                    destLat: this.state.selectedDestination.locationObject
-                      .geometry.location.lat,
-                    destLong: this.state.selectedDestination.locationObject
-                      .geometry.location.lng
-                  });
-                }}
-              >
-                <Text style={styles.txt}>Confirm</Text>
-              </Button>
-              {isSearching && (
-                <ActivityIndicator
-                  size="large"
-                  color="lightsteelblue"
-                  style={{ marginTop: 10 }}
+            {/*prints out all location options*/}
+            <View style={styles.inputWrapper}>
+              {/*search box*/}
+              <View style={styles.search}>
+                <Icon name="ios-map" style={styles.map} />
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Search..."
+                  onChangeText={handleTextChange}
+                  value={inputValue}
                 />
-              )}
+              </View>
+            </View>
+            <Button
+              title="Select"
+              style={styles.button}
+              onPress={selectDestinationHandler.bind(this, {
+                selectedDestination
+              })}
+            >
+              <Text style={styles.txt}>Confirm</Text>
+            </Button>
+            {isSearching && (
+              <ActivityIndicator
+                size="large"
+                color="lightsteelblue"
+                style={{ marginTop: 10 }}
+              />
+            )}
 
-              <ScrollView>
-                {locationResults.map(el => (
-                  //each location item
-                  <LocationItem
-                    //API props
-                    {...el}
-                    key={el.id}
-                    fetchDetails={fetchDetails}
-                    //custom props. calls the function on this file
-                    setDestinationFromChild={this.setDestinationFromChild}
-                  />
-                ))}
-              </ScrollView>
-            </React.Fragment>
-          )}
-        </GoogleAutoComplete>
-      </View>
-    );
-  }
-}
+            <ScrollView>
+              {locationResults.map(el => (
+                //each location item
+                <LocationItem
+                  //API props
+                  {...el}
+                  key={el.id}
+                  fetchDetails={fetchDetails}
+                  //custom props. calls the function on this file
+                  setDestinationFromChild={setSelectedDestination}
+                />
+              ))}
+            </ScrollView>
+          </React.Fragment>
+        )}
+      </GoogleAutoComplete>
+    </View>
+  );
+};
 
 export default SelectDestination;
 

@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleSheet, Text, View, Dimensions, StatusBar } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, Dimensions, StatusBar } from "react-native";
 import {
   Header,
   Left,
@@ -8,147 +8,151 @@ import {
   Body,
   Right,
   Container,
-  Footer,
-  FooterTab,
   Content,
   Item,
   Input
 } from "native-base";
-
 import MapView, { Marker } from "react-native-maps";
+import SelectDestination from "./SelectDestination";
+import * as Permissions from "expo-permissions";
 
-// The home screen can access multiple other screens through different navigation buttons
-class HomeScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    (this.state = {
-      latitude: 0,
-      longitude: 0
-    }),
-      (this.destination = {
-        latitude: 14.61828,
-        longitude: 121.04976
-      });
-  }
+const HomeScreen = props => {
+  const [current, setCurrent] = useState({
+    latitude: 0,
+    longitude: 0
+  });
+  const [destination, setDestination] = useState({
+    latitude: 14.61828,
+    longitude: 121.04976
+  });
 
-  componentDidMount() {
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        });
-        console.log(this.state);
-      },
-      err => console.log(err)
-    );
-  }
-  render() {
-    openDrawer = () => {
-      this.drawer._root.open();
+  useEffect(() => {
+    const permissionHandler = async () => {
+      const { status } = await Permissions.askAsync(
+        Permissions.LOCATION
+      ).catch(error => console.error(error));
+
+      if (status !== "granted") {
+        Alert.alert(
+          "PERMISSION DENIED",
+          "Permission to access location was denied.",
+          [{ text: "Okay", style: "cancel" }]
+        );
+      } else {
+        navigator.geolocation.getCurrentPosition(
+          currLocation => {
+            setCurrent({
+              latitude: currLocation.coords.latitude,
+              latitudeDelta: 0.005,
+              longitude: currLocation.coords.longitude,
+              longitudeDelta: 0.005
+            });
+          },
+          err => console.log(err)
+        );
+      }
     };
-    return (
-      <Container>
-        <Header style={styles.header}>
-          <Left style={{ flex: 1 }}>
-            <Button
-              transparent
-              onPress={() => this.props.navigation.navigate("Navbar")}
-            >
-              <Icon name="menu" />
-            </Button>
-          </Left>
+    permissionHandler();
+  }, [current]);
 
-          <Body style={{ flex: 1 }}>
-            <Text style={styles.text}>BA3</Text>
-          </Body>
+  useEffect(() => {
+    const selectDestinationHandler = selectedDestination => {
+      setDestination(selectedDestination);
+    };
+  }, [props.destination]);
 
-          <Right style={{ flex: 1 }}>
-            <Button
-              transparent
-              onPress={() => {
-                console.log("POWER");
-              }}
-            >
-              <Icon name="power" />
-            </Button>
-          </Right>
-        </Header>
-        <Content>
+  return (
+    <Container>
+      <Header style={styles.header}>
+        <Left style={{ flex: 1 }}>
           <Button
-            iconLeft
-            style={styles.button}
+            transparent
+            // onPress={)}
+          >
+            <Icon name="menu" />
+          </Button>
+        </Left>
+
+        <Body style={{ flex: 1 }}>
+          <Text style={styles.text}>BA3</Text>
+        </Body>
+
+        <Right style={{ flex: 1 }}>
+          <Button
+            transparent
             onPress={() => {
-              this.props.navigation.navigate("SelectDestination");
-              console.log("pressed SelectDestination button");
+              console.log("POWER");
             }}
           >
-            <Icon name="navigate" style={styles.icons} />
-            <Text style={styles.buttontxt}>Select Destination</Text>
+            <Icon name="power" />
           </Button>
-          <Content style={styles.distance}>
-            <Item>
-              <Icon active name="bicycle" style={styles.bike} />
-              <Input
-                placeholder="Input Distance"
-                placeholderTextColor="gainsboro"
-                style={styles.input}
-                keyboardType={"numeric"}
-              />
-              <Text style={styles.textkm}>km</Text>
-            </Item>
-          </Content>
-          <MapView
-            style={styles.mapStyle}
-            showsUserLocation={true}
-            rotateEnabled={false}
-            region={{
-              latitude: this.state.latitude,
-              longitude: this.state.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421
-            }}
-          >
-            <Marker coordinate={this.destination}></Marker>
-          </MapView>
-
-          <Button rounded style={styles.button2}>
-            <Text style={styles.buttontxt2}>Start</Text>
-          </Button>
-          {/*
-          <Button
-            title="SetWarnDistance"
-            onPress={() => {
-              this.props.navigation.navigate("SetWarnDistance");
-              console.log("pressed SetWarnDistance button");
-            }}
-          />
-          <Button
-            title="Sidebar"
-            onPress={() => {
-              this.props.navigation.navigate("Sidebar");
-              console.log("pressed Sidebar button");
-            }}
-          />
-          <Button
-            title="Tracker"
-            onPress={() => {
-              this.props.navigation.navigate("Tracker");
-              console.log("pressed Tracker button");
-            }}
-          />*/}
+        </Right>
+      </Header>
+      <Content>
         </Content>
-        {/* <Footer>
-          <FooterTab>
-            <Button full>
-              <Text>Footer</Text>
-            </Button>
-          </FooterTab>
-        </Footer> */}
-      </Container>
-    );
-  }
-}
+        <SelectDestination></SelectDestination>;
+        <Content style={styles.distance}>
+          <Item>
+            <Icon active name="bicycle" style={styles.bike} />
+            <Input
+              placeholder="Input Distance"
+              placeholderTextColor="gainsboro"
+              style={styles.input}
+              keyboardType={"numeric"}
+            />
+            <Text style={styles.textkm}>km</Text>
+          </Item>
+        </Content>
+        <MapView
+          style={styles.mapStyle}
+          showsUserLocation={true}
+          rotateEnabled={false}
+          region={{
+            latitude: current.latitude,
+            longitude: current.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421
+          }}
+        >
+          <Marker coordinate={destination}></Marker>
+        </MapView>
+
+        <Button rounded style={styles.button2}>
+          <Text style={styles.buttontxt2}>Start</Text>
+        </Button>
+        {/*
+      <Button
+        title="SetWarnDistance"
+        onPress={() => {
+          this.props.navigation.navigate("SetWarnDistance");
+          console.log("pressed SetWarnDistance button");
+        }}
+      />
+      <Button
+        title="Sidebar"
+        onPress={() => {
+          this.props.navigation.navigate("Sidebar");
+          console.log("pressed Sidebar button");
+        }}
+      />
+      <Button
+        title="Tracker"
+        onPress={() => {
+          this.props.navigation.navigate("Tracker");
+          console.log("pressed Tracker button");
+        }}
+      />*/}
+      </Content>
+      {/* <Footer>
+      <FooterTab>
+        <Button full>
+          <Text>Footer</Text>
+        </Button>
+      </FooterTab>
+    </Footer> */}
+    </Container>
+  );
+};
 
 export default HomeScreen;
 
