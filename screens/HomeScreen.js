@@ -48,12 +48,12 @@ class HomeScreen extends React.Component {
       (this.handlePlaySound = this.handlePlaySound.bind(this));
   }
   makeVibration() {
-    const DURATION = 10000;
     const PATTERN = [1000, 2000, 3000];
     Vibration.vibrate(PATTERN, true);
   }
 
   // NOTIF
+  // call this.sendPushNotification when user has entered circle
   sendPushNotification() {
     try {
       const alertTime = new Date().getTime() + 500;
