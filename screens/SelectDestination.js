@@ -6,11 +6,17 @@ import {
   TextInput,
   ScrollView,
   ActivityIndicator,
-  Dimensions
+  Dimensions,
+  StatusBar
 } from "react-native";
 import {
+  Header,
+  Left,
+  Button,
   Icon,
-  Button
+  Body,
+  Right,
+  Container
 } from "native-base";
 import { GoogleAutoComplete } from "react-native-google-autocomplete";
 import LocationItem from "../components/LocationItem";
@@ -52,6 +58,21 @@ class SelectDestination extends React.Component {
 
   render() {
     return (
+      <Container>
+      <Header style={styles.header}>
+        <Left style={{ flex: 1 }}>
+          <Button transparent onPress={ () => this.props.navigation.navigate("HomeScreen") }>
+          <Icon name="ios-arrow-round-back"/>
+          </Button>
+        </Left>
+
+        <Body style={{ flex: 1 }}>
+          <Text style={styles.text}>Destination</Text>
+        </Body>
+
+        <Right style={{ flex: 1 }}>
+        </Right>
+      </Header>
       <View style={styles.container}>
         <Text style={styles.status}>Selected Destination: {this.printSelectedDestination()}</Text>
 
@@ -118,6 +139,7 @@ class SelectDestination extends React.Component {
           )}
         </GoogleAutoComplete>
       </View>
+      </Container>
     );
   }
 }
@@ -172,4 +194,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center"
   },
+  text: {
+    alignSelf:"center",
+    color: "white",
+    fontFamily: 'Roboto',
+    fontSize: 15,
+    fontWeight: "bold"
+  },
+    header: {
+      paddingRight: 15,
+      paddingLeft: 15,
+      height: 70,
+      //marginTop: StatusBar.currentHeight,
+      backgroundColor: "lightskyblue",
+      paddingTop: 14
+  }
 });

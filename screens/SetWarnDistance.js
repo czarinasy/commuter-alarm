@@ -1,8 +1,14 @@
 import React from "react";
 import { StyleSheet, Text, ScrollView, Dimensions } from "react-native";
 import {
-    Button
-  } from "native-base";
+  Header,
+  Left,
+  Button,
+  Icon,
+  Body,
+  Right,
+  Container
+} from "native-base";
 
 class SetWarnDistance extends React.Component {
   static navigationOptions = {
@@ -11,6 +17,21 @@ class SetWarnDistance extends React.Component {
 
   render() {
     return (
+    <Container>
+      <Header style={styles.header}>
+        <Left style={{ flex: 1 }}>
+          <Button transparent onPress={ () => this.props.navigation.navigate("Settings")}>
+          <Icon name="ios-arrow-round-back"/>
+          </Button>
+        </Left>
+  
+        <Body style={{ flex: 1 }}>
+          <Text style={styles.text}>Distances</Text>
+        </Body>
+  
+        <Right style={{ flex: 1 }}>
+        </Right>
+      </Header>
       <ScrollView style={styles.container}>
       <Button transparent
           style={styles.button}
@@ -93,6 +114,7 @@ class SetWarnDistance extends React.Component {
           <Text style={styles.buttontxt}>10</Text>
         </Button>
       </ScrollView>
+      </Container>
     );
   }
 }
@@ -104,7 +126,19 @@ const styles = StyleSheet.create({
     alignContent:"center"
   },
   text: {
-    fontSize: 30
+    alignSelf:"center",
+    color: "white",
+    fontFamily: 'Roboto',
+    fontSize: 15,
+    fontWeight: "bold"
+  },
+    header: {
+      paddingRight: 15,
+      paddingLeft: 15,
+      height: 70,
+      //marginTop: StatusBar.currentHeight,
+      backgroundColor: "lightskyblue",
+      paddingTop: 14
   },
   button: {
     // position: "absolute",
