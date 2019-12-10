@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { createAppContainer } from "react-navigation";
+import { createAppContainer, stackNavigator } from "react-navigation";
 import { createDrawerNavigator } from 'react-navigation-drawer';
 
 import HomeScreen from "./screens/HomeScreen";
@@ -26,9 +26,16 @@ const NavigationStack = createDrawerNavigator({
   Notifications: { screen: Notifications },
   MyFavorites: { screen: MyFavorites },
   Settings: { screen: Settings },
-  Tracker: { screen: Tracker },
+  Tracker: { screen: Tracker }
   // {headerLayoutPreset: 'center'}
-});
+},
+{drawerBackgroundColor: "lightskyblue",
+drawerWidth: 250,
+contentOptions:{
+  labelStyle: {
+    color: "white"
+  }
+}});
 
 // This is the container for the app
 // You can think of it as the "main" work area
