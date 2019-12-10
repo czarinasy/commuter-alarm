@@ -1,5 +1,13 @@
 import React from "react";
-import { StyleSheet, Text, View, Dimensions, StatusBar } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  StatusBar,
+  Alert,
+  Vibration
+} from "react-native";
 import {
   Header,
   Left,
@@ -16,6 +24,8 @@ import {
 } from "native-base";
 
 import MapView, { Marker } from "react-native-maps";
+import * as Permissions from "expo-permissions";
+import { Notifications } from "expo";
 
 // The home screen can access multiple other screens through different navigation buttons
 class HomeScreen extends React.Component {
@@ -23,12 +33,82 @@ class HomeScreen extends React.Component {
     super(props);
     (this.state = {
       latitude: 0,
-      longitude: 0
+      longitude: 0,
+
+      // NOTIF
+      scheduled: false,
+      time: new Date().toLocaleString(),
+      scheduledTimes: []
     }),
       (this.destination = {
         latitude: 14.61828,
         longitude: 121.04976
       });
+    // NOTIF
+    this.createLocalNotification = this.createLocalNotification.bind(this);
+  }
+  makeVibration() {
+    Vibration.vibrate();
+  }
+  //NOTIF
+  /*createLocalNotification(timer, localestring) {
+    try {
+      const alertTime = new Date().getTime() + 500;
+      const localNotification = {
+        title: "Notification Scheduled at:",
+        body: new Date(alertTime).toLocaleString(),
+        ios: {
+          sound: true
+        },
+        android: {
+          sound: true,
+          priority: "high",
+          vibrate: true
+        }
+      };
+
+      const schedulingOptions = {
+        time: alertTime
+      };
+
+      Notifications.scheduleLocalNotificationAsync(
+        localNotification,
+        schedulingOptions
+      )
+        .then(id =>
+          this.setState({
+            scheduledTimes: [
+              ...this.state.scheduledTimes,
+              new Date(alertTime).toLocaleString()
+            ],
+            scheduled: true
+          })
+        )
+        .catch(err => console.error("Error creating notification", err));
+    } catch (e) {
+      console.error("cannot create notification: " + e);
+    }
+  }*/
+  sendPushNotification() {
+    try {
+      const alertTime = new Date().getTime() + 500;
+      const localNotification = {
+        title: "Notification Scheduled at:",
+        body: new Date(alertTime).toLocaleString(),
+        ios: {
+          sound: true
+        },
+        android: {
+          sound: true,
+          priority: "high",
+          vibrate: true
+        }
+      };
+
+      Notifications.presentLocalNotificationAsync(localNotification);
+    } catch (e) {
+      console.error("cannot create notification: " + e);
+    }
   }
 
   componentDidMount() {
@@ -42,11 +122,19 @@ class HomeScreen extends React.Component {
       },
       err => console.log(err)
     );
+
+    // NOTIF
+    Permissions.askAsync(Permissions.NOTIFICATIONS);
+    //setTimeout(() => {
+    this.setState({ time: new Date().toLocaleString() });
+    //}, 1000);
   }
+
   render() {
     openDrawer = () => {
       this.drawer._root.open();
     };
+
     return (
       <Container>
         <Header style={styles.header}>
@@ -112,7 +200,11 @@ class HomeScreen extends React.Component {
             <Marker coordinate={this.destination}></Marker>
           </MapView>
 
-          <Button rounded style={styles.button2}>
+          <Button
+            rounded
+            style={styles.button2}
+            onPress={this.sendPushNotification}
+          >
             <Text style={styles.buttontxt2}>Start</Text>
           </Button>
           {/*
