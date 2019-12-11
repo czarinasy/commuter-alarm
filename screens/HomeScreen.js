@@ -30,6 +30,8 @@ import { Notifications } from "expo";
 let destName = "";
 let destLat = 0;
 let destLong = 0;
+let arrived = false;
+
 function degrees_to_radians(degrees) {
   var pi = Math.PI;
   //console.log(degrees * (pi / 180));
@@ -101,7 +103,52 @@ handlePlaySound = async () => {
     console.log(error);
   }
 };
+getETA = () => {
+  const fetchDistMat = async () => {
+    const response = await fetch(
+      "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" +
+        "14.6395" +
+        "," +
+        "121.078" +
+        "&destinations=" +
+        destLat +
+        "," +
+        destLong +
+        "&key=" +
+        GOOGLE_API_KEY()
+    );
+    const json = await response.json();
+    console.log(json);
+  };
+  fetchDistMat();
+};
+function inRadius() {
+  cLat = degrees_to_radians(14.6395);
+  cLong = degrees_to_radians(121.078);
+  dLat = degrees_to_radians(destLat);
+  dLong = degrees_to_radians(destLong);
+  //console.log(cLat);
+  const difLat = cLat - dLat;
+  const difLong = cLong - dLong;
 
+  const a =
+    Math.sin(difLat / 2) ** 2 +
+    Math.cos(dLat) * Math.cos(cLat) * Math.sin(difLong / 2) ** 2;
+  const c = 2 * Math.asin(Math.sqrt(a));
+  const r = 6371;
+  const val = c * r;
+  const radius = 0.5;
+  //console.log(val);
+  if (val <= radius) {
+    console.log("inside");
+    arrived = true;
+    //return "Inside the area";
+  } else {
+    console.log("outside");
+    arrived = false;
+    //return "Outside the area";
+  }
+}
 const HomeScreen = () => {
   const [isFontReady, setIsFontReady] = useState(false);
 
@@ -150,6 +197,9 @@ const HomeScreen = () => {
       }
     };
     permisionsHandler();
+    if (arrived) {
+      sendPushNotification();
+    }
   });
 
   const setDestinationHandler = async selectedDestination => {
@@ -196,33 +246,11 @@ const HomeScreen = () => {
     //console.log(destination);
 
     fetchDistMat();
-    sendPushNotification();
+    //sendPushNotification();
     console.log("rad");
     inRadius();
   };
-  const inRadius = () => {
-    cLat = degrees_to_radians(current.latitude);
-    cLong = degrees_to_radians(current.longitude);
-    dLat = degrees_to_radians(destLat);
-    dLong = degrees_to_radians(destLong);
-    //console.log(cLat);
-    const difLat = cLat - dLat;
-    const difLong = cLong - dLong;
 
-    const a =
-      Math.sin(difLat / 2) ** 2 +
-      Math.cos(dLat) * Math.cos(cLat) * Math.sin(difLong / 2) ** 2;
-    const c = 2 * Math.asin(Math.sqrt(a));
-    const r = 6371;
-    const val = c * r;
-    const radius = 0.5;
-    //console.log(val);
-    if (val <= radius) {
-      return "Inside the area";
-    } else {
-      return "Outside the area";
-    }
-  };
   return (
     <Container>
       <Header style={styles.header}>
