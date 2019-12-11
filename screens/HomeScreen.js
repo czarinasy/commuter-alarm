@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, Dimensions, StatusBar, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  Dimensions,
+  StatusBar,
+  Alert,
+  Vibration
+} from "react-native";
 import {
   Header,
   Left,
@@ -17,6 +24,9 @@ import SelectDestination from "../components/SelectDestination";
 import * as Permissions from "expo-permissions";
 import * as Font from "expo-font";
 import { GOOGLE_API_KEY } from "../API_KEYS";
+import { Audio } from "expo-av";
+import { Notifications } from "expo";
+
 let destName = "";
 let destLat = 0;
 let destLong = 0;
@@ -25,6 +35,73 @@ function degrees_to_radians(degrees) {
   //console.log(degrees * (pi / 180));
   return degrees * (pi / 180);
 }
+function makeVibration() {
+  const PATTERN = [1000, 2000, 3000];
+  Vibration.vibrate(PATTERN, true);
+}
+
+// NOTIF
+// call this.sendPushNotification when user has entered circle
+function sendPushNotification() {
+  try {
+    const alertTime = new Date().getTime() + 500;
+    const localNotification = {
+      title: "You are arriving at your stop soon.",
+      body: new Date(alertTime).toLocaleString(),
+      ios: {
+        sound: true
+      },
+      android: {
+        sound: true,
+        priority: "high",
+        vibrate: true
+      }
+    };
+    Notifications.presentLocalNotificationAsync(localNotification);
+    makeVibration();
+    handlePlaySound();
+  } catch (e) {
+    console.error("cannot create notification: " + e);
+  }
+}
+handlePlaySound = async () => {
+  const soundObject = new Audio.Sound();
+  const alertTime = new Date().getTime();
+  try {
+    let source = require("../assets/ring.mp3");
+    await soundObject.loadAsync(source);
+    Alert.alert(
+      "You are arriving at your stop soon.",
+      new Date(alertTime).toLocaleString(),
+      [
+        {
+          text: "OK",
+          onPress: () => {
+            Vibration.cancel();
+            soundObject.stopAsync();
+            console.log("Cancel Pressed");
+          },
+          style: "cancel"
+        }
+      ],
+      { cancelable: false }
+    );
+    await soundObject
+      .playAsync()
+      .then(async playbackStatus => {
+        setTimeout(() => {
+          soundObject.unloadAsync();
+        }, playbackStatus.playableDurationMillis);
+      })
+
+      .catch(error => {
+        console.log(error);
+      });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const HomeScreen = () => {
   const [isFontReady, setIsFontReady] = useState(false);
 
@@ -36,6 +113,7 @@ const HomeScreen = () => {
       setIsFontReady(true);
     };
     loadFont();
+    Permissions.askAsync(Permissions.NOTIFICATIONS);
   });
 
   const [current, setCurrent] = useState({
@@ -118,6 +196,7 @@ const HomeScreen = () => {
     //console.log(destination);
 
     fetchDistMat();
+    sendPushNotification();
     console.log("rad");
     inRadius();
   };
