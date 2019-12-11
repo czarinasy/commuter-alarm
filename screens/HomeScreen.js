@@ -109,9 +109,9 @@ getETA = () => {
   const fetchDistMat = async () => {
     const response = await fetch(
       "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" +
-        "14.6395" +
+        currentLat.toString() +
         "," +
-        "121.078" +
+        currentLong.toString() +
         "&destinations=" +
         destLat +
         "," +
@@ -305,6 +305,13 @@ const HomeScreen = () => {
           longitudeDelta: current.longitudeDelta
         }}
       >
+        <MapView.Circle
+          center={destination}
+          radius={1 * 1000} //in meters
+          strokeWidth={2}
+          strokeColor="#3399ff"
+          fillColor="#80bfff"
+        />
         <Marker coordinate={destination}></Marker>
       </MapView>
 
