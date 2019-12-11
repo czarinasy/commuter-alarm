@@ -15,14 +15,12 @@ import { GOOGLE_API_KEY } from "../API_KEYS";
 
 const SelectDestination = props => {
   const [selectedDestination, setSelectedDestination] = useState({});
-  const [hasSelected, setHasSelected] = useState(false);
 
   const selectDestinationHandler = async location => {
     if (location) {
       console.log(location.address_components[0].long_name);
       setSelectedDestination(location);
       if (selectedDestination) {
-        setHasSelected(true);
         console.log(
           "\n\n-------------------[SELECT DESTINATION] Selected Destination -------------------"
         );

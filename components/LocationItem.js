@@ -9,8 +9,7 @@ const LocationItem = props => {
     );
     console.log(location.address_components[0].long_name);
     Alert.alert(
-      "Selected Destination: " + location.address_components[0].long_name,
-      JSON.stringify(location)
+      "Selected Destination: " + location.address_components[0].long_name
     );
     props.onSetLocation(location);
   };

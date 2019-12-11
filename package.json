@@ -10,7 +10,7 @@
   "dependencies": {
     "acorn": "^7.1.0",
     "expo": "^35.0.0",
-    "expo-av": "~7.0.1",
+    "expo-av": "~7.0.0",
     "expo-font": "~7.0.0",
     "expo-module-scripts": "^1.1.1",
     "jest": "^24.9.0",

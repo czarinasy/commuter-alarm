@@ -171,8 +171,10 @@ const HomeScreen = () => {
   });
 
   const [destination, setDestination] = useState({
-    latitude: 0,
-    longitude: 0
+    latitude: 14.6395,
+    longitude: 121.0781,
+    latitudeDelta: 0.005,
+    longitudeDelta: 0.005
   });
 
   useEffect(() => {
@@ -204,18 +206,24 @@ const HomeScreen = () => {
 
   const setDestinationHandler = async selectedDestination => {
     if (selectedDestination) {
-      setDestination(selectedDestination);
-      if (destination) {
+      console.log(selectedDestination);
+      setDestination({
+        ...destination,
+        latitude: selectedDestination.geometry.location.lat,
+        longitude: selectedDestination.geometry.location.lng
+      });
+      if (
+        destination.latitude === selectedDestination.geometry.location.lat &&
+        destination.longitude === selectedDestination.geometry.location.lng
+      ) {
         console.log(
           "\n\n-------------------[HOMESCREEN] Selected Destination -------------------"
         );
-        console.log(destination.address_components[0].long_name);
-        console.log(destination.geometry.location.lat);
-        console.log(destination.geometry.location.lng);
         destName = destination.address_components[0].long_name;
-        destLat = destination.geometry.location.lat;
-        destLong = destination.geometry.location.lng;
+        console.log(destination.latitude);
+        console.log(destination.longitude);
         console.log(destName);
+        console.log(destination);
       }
     }
   };
