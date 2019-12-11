@@ -142,10 +142,11 @@ function inRadius() {
   if (val <= radius) {
     console.log("inside");
     arrived = true;
+    sendPushNotification();
     //return "Inside the area";
   } else {
     console.log("outside");
-    arrived = false;
+    //arrived = false;
     //return "Outside the area";
   }
 }
@@ -197,9 +198,9 @@ const HomeScreen = () => {
       }
     };
     permisionsHandler();
-    if (arrived) {
+    /*if (arrived) {
       sendPushNotification();
-    }
+    }*/
   });
 
   const setDestinationHandler = async selectedDestination => {
