@@ -31,6 +31,8 @@ let destName = "";
 let destLat = 0;
 let destLong = 0;
 let arrived = false;
+let currentLat = 0;
+let currentLong = 0;
 
 function degrees_to_radians(degrees) {
   var pi = Math.PI;
@@ -123,8 +125,8 @@ getETA = () => {
   fetchDistMat();
 };
 function inRadius() {
-  cLat = degrees_to_radians(14.6395);
-  cLong = degrees_to_radians(121.078);
+  cLat = degrees_to_radians(currentLat);
+  cLong = degrees_to_radians(currentLong);
   dLat = degrees_to_radians(destLat);
   dLong = degrees_to_radians(destLong);
   //console.log(cLat);
@@ -201,6 +203,8 @@ const HomeScreen = () => {
     /*if (arrived) {
       sendPushNotification();
     }*/
+    currentLat = current.latitude;
+    currentLong = current.longitude;
   });
 
   const setDestinationHandler = async selectedDestination => {
@@ -251,7 +255,6 @@ const HomeScreen = () => {
     console.log("rad");
     inRadius();
   };
-
   return (
     <Container>
       <Header style={styles.header}>
